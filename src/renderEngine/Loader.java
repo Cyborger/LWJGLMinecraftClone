@@ -20,7 +20,6 @@ public class Loader {
 	private List<Integer> textures = new ArrayList<Integer>();
 	
 	public RawModel loadToVAO(float[] positions,float[] imageCoords, float[] normals,  int[] indices) {
-		
 		int vaoID = createVAO();
 		bindIndiceBuffer(indices);
 		storeDataInAttributeList(0, 3, positions);
@@ -28,7 +27,6 @@ public class Loader {
 		storeDataInAttributeList(2, 3, normals);
 		unbindVAO();
 		return new RawModel(vaoID, indices.length);
-		
 	}
 	
 	public RawModel loadToVAO(float positions[], int dimensions) {
@@ -72,31 +70,24 @@ public class Loader {
 	}
 
 	private void bindIndiceBuffer(int[] indice) {
-		
 		int vboID = GL15.glGenBuffers();
 		vbos.add(vboID);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
 		IntBuffer buffer = storeDataInIntBuffer(indice);
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-		
 	}
 	
 	private IntBuffer storeDataInIntBuffer(int[] data) {
-		
 		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
 		buffer.put(data);
 		buffer.flip();
 		return buffer;
-		
 	}
 	
 	private FloatBuffer storeDataInFloatBuffer(float[] data) {
-		
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
 		buffer.put(data);
 		buffer.flip();
 		return buffer;
-		
-		
 	}
 }
