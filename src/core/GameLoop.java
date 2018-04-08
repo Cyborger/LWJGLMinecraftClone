@@ -1,5 +1,9 @@
 package core;
 
+import org.lwjgl.opengl.Display;
+
+import renderEngine.DisplayManager;
+
 public class GameLoop {
 	
 	public static void main(String[] args) {
@@ -9,11 +13,14 @@ public class GameLoop {
 	}
 	
 	static void initialize() {
-		// Initialize variables
+		DisplayManager.CreateDisplay();
 	}
 	
 	static void loop() {
-		// While window is open
+		while(!Display.isCloseRequested()) {
+			DisplayManager.UpdateDisplay();
+		}
+		DisplayManager.CloseDisplay();
 	}
 	
 	static void cleanUp() {
