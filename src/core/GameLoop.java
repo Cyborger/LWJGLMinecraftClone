@@ -20,10 +20,9 @@ public class GameLoop {
 		while(!Display.isCloseRequested()) {
 			DisplayManager.UpdateDisplay();
 		}
-		DisplayManager.CloseDisplay();
 	}
 	
 	static void cleanUp() {
-		// Clean up textures and VAOs in memory
+		DisplayManager.CloseDisplay();
 	}
 }

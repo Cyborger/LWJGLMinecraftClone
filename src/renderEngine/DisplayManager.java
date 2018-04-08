@@ -58,6 +58,4 @@ public class DisplayManager {
 	public static void CloseDisplay() {
 		Display.destroy();
 	}
-	
-
 }
