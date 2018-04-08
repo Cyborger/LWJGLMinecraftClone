@@ -14,6 +14,7 @@ public class DisplayManager {
 	public static final int HEIGHT = 720;
 	public static final int FPS_CAP = 120;
 	
+	private static long currentFrameTime;
 	private static long lastFrameTime;
 	private static float delta;
 	
@@ -24,33 +25,39 @@ public class DisplayManager {
 			Display.create(new PixelFormat(), attrib);
 			Display.setTitle("LWJGL Minecraft!");
 		} catch (LWJGLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		GL11.glViewport(0, 0, WIDTH, HEIGHT);
-		
 	}
 	
 	public static void UpdateDisplay() {
 		Display.sync(FPS_CAP);
 		Display.update();
-		long currentFrameTime = getCurrentTime();
-		delta = (currentFrameTime - lastFrameTime)/1000f;
+		calculateDelta();
+	}
+	
+	private static void calculateDelta() {
+		currentFrameTime = getCurrentTime();
+		delta = currentFrameTime - lastFrameTime;
 		lastFrameTime = currentFrameTime;
-	}
-	
-	public static float getFrameTimeSeconds() {
-		return delta;
-	}
-	
-	public static void CloseDisplay() {
-		Display.destroy();
 	}
 	
 	private static long getCurrentTime() {
 		return Sys.getTime()*1000 / Sys.getTimerResolution();
 	}
 	
+	public static float getDeltaInMilliseconds() {
+		return delta;
+	}
 	
+	public static float getDeltaInSeconds() {
+		return delta / 1000f;
+	}
+	
+	public static void CloseDisplay() {
+		Display.destroy();
+	}
+	
+
 }
