@@ -6,6 +6,7 @@ import models.RawModel;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.Renderer;
+import shaders.StaticShader;
 
 public class GameLoop {
 	
@@ -13,12 +14,16 @@ public class GameLoop {
 		-0.5f, 0.5f, 0f,
 		-0.5f, -0.5f, 0f,
 		0.5f, -0.5f, 0f,
-		0.5f, -0.5f, 0f,
 		0.5f, 0.5f, 0f,
-		-0.5f, 0.5f, 0f 
+	};
+	
+	static int[] indices = {
+			0, 1, 3,
+			3, 1, 2
 	};
 	
 	static RawModel model;
+	static StaticShader shader;
 	
 	public static void main(String[] args) {
 		initialize();
@@ -28,18 +33,25 @@ public class GameLoop {
 	
 	static void initialize() {
 		DisplayManager.CreateDisplay();
-		model = Loader.loadToVAO(vertices, 3);
+		float[] matt = {};
+		float[] sucks = {};
+		model = Loader.loadToVAO(vertices, matt, sucks, indices);
+		shader = new StaticShader();
 	}
 	
 	static void loop() {
 		while(!Display.isCloseRequested()) {
 			Renderer.prepare();
+			shader.start();
 			Renderer.render(model);
+			shader.stop();
 			DisplayManager.UpdateDisplay();
 		}
 	}
 	
 	static void cleanUp() {
+		shader.cleanUp();
+		Loader.cleanUp();
 		DisplayManager.CloseDisplay();
 	}
 }

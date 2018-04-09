@@ -51,6 +51,10 @@ public abstract class ShaderProgram {
 		GL20.glDeleteProgram(programID);
 	}
 	
+	protected void bindAttribute(int attribute, String variableName) {
+		GL20.glBindAttribLocation(programID, attribute, variableName);
+	}
+	
 	protected void loadFloat(int location, float value) {
 		GL20.glUniform1f(location, value);
 	}
