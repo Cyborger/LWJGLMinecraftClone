@@ -1,6 +1,7 @@
 package core;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector3f;
 
 import entities.Entity;
 import models.ModelTexture;
@@ -51,6 +52,7 @@ public class GameLoop {
 		rawModel = OBJFileLoader.loadOBJ("cube");
 		texture = new ModelTexture(Loader.loadTexture("dirt"));
 		texturedModel = new TexturedModel(rawModel, texture);
+		block1 = new Entity(texturedModel, new Vector3f(0, 0, 0), 0, 0, 0, 1);
 		shader = new StaticShader();
 	}
 	
