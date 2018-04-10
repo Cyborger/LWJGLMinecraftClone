@@ -60,7 +60,7 @@ public class GameLoop {
 		while(!Display.isCloseRequested()) {
 			Renderer.prepare();
 			shader.start();
-			Renderer.render(texturedModel);
+			Renderer.render(block1, shader);
 			shader.stop();
 			DisplayManager.UpdateDisplay();
 		}

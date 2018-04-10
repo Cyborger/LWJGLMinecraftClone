@@ -9,7 +9,7 @@ public class Camera {
 	private float distanceFromPlayer = 50;
 	private float angleAroundPlayer = 0;
 	
-	private Vector2f rotation = new Vector2f(0,0);
+	private Vector3f position = new Vector3f(0,0,0);
 	private float pitch = 20;
 	private float yaw;
 	private float roll;
@@ -51,6 +51,10 @@ public class Camera {
 		
 	}
 
+	public Vector3f getPosition() {
+		return position;
+	}
+	
 	public float getPitch() {
 		return pitch;
 	}
