@@ -31,7 +31,7 @@ public class GameLoop {
 			1, 0
 	};
 	
-	static RawModel model;
+	static RawModel model;		
 	static ModelTexture texture;
 	static TexturedModel texturedModel;
 	static StaticShader shader;
