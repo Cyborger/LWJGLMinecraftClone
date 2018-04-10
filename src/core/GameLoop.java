@@ -3,10 +3,12 @@ package core;
 import org.lwjgl.opengl.Display;
 
 import models.RawModel;
+import models.TexturedModel;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.Renderer;
 import shaders.StaticShader;
+import textures.ModelTexture;
 
 public class GameLoop {
 	
@@ -22,7 +24,16 @@ public class GameLoop {
 			3, 1, 2
 	};
 	
+	static float[] textureCoords = {
+			0, 0,
+			0, 1,
+			1, 1,
+			1, 0
+	};
+	
 	static RawModel model;
+	static ModelTexture texture;
+	static TexturedModel texturedModel;
 	static StaticShader shader;
 	
 	public static void main(String[] args) {
@@ -33,9 +44,9 @@ public class GameLoop {
 	
 	static void initialize() {
 		DisplayManager.CreateDisplay();
-		float[] matt = {};
-		float[] sucks = {};
-		model = Loader.loadToVAO(vertices, matt, sucks, indices);
+		model = Loader.loadToVAO(vertices, textureCoords, indices);
+		texture = new ModelTexture(Loader.loadTexture("dirt"));
+		texturedModel = new TexturedModel(model, texture);
 		shader = new StaticShader();
 	}
 	
@@ -43,7 +54,7 @@ public class GameLoop {
 		while(!Display.isCloseRequested()) {
 			Renderer.prepare();
 			shader.start();
-			Renderer.render(model);
+			Renderer.render(texturedModel);
 			shader.stop();
 			DisplayManager.UpdateDisplay();
 		}
