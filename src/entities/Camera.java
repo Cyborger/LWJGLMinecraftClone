@@ -1,5 +1,6 @@
 package entities;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -25,8 +26,9 @@ public class Camera {
 	}
 	
 	public void Move() {
-		calculatePitch();
-		calculateAngleAroundPlayer();
+		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			position.z -= 1.0f;
+		}
 	}
 
 	private void calculateAngleAroundPlayer() {

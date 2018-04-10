@@ -3,6 +3,7 @@ package core;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import entities.Camera;
 import entities.Entity;
 import models.ModelTexture;
 import models.RawModel;
@@ -39,6 +40,7 @@ public class GameLoop {
 	static TexturedModel texturedModel;
 	static Entity block1;
 	static Entity block2;
+	static Camera camera;
 	static StaticShader shader;
 	
 	public static void main(String[] args) {
@@ -53,14 +55,17 @@ public class GameLoop {
 		texture = new ModelTexture(Loader.loadTexture("dirt"));
 		texturedModel = new TexturedModel(rawModel, texture);
 		block1 = new Entity(texturedModel, new Vector3f(0, 0, 0), 0, 0, 0, 1);
+		camera = new Camera();
 		shader = new StaticShader();
 	}
 	
 	static void loop() {
 		while(!Display.isCloseRequested()) {
+			camera.Move();
 			Renderer.prepare();
 			shader.start();
 			Renderer.render(block1, shader);
+			shader.loadViewMatrix(camera);
 			shader.stop();
 			DisplayManager.UpdateDisplay();
 		}
