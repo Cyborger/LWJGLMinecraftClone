@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL20;
 
 public class ShaderLoader {
 	public static int loadShader(String file, int type) {
-		String shaderSource = buildShaderSource(file);
+		StringBuilder shaderSource = buildShaderSource(file);
 		int shaderID = GL20.glCreateShader(type);
 		GL20.glShaderSource(shaderID, shaderSource);
 		GL20.glCompileShader(shaderID);
@@ -21,21 +21,20 @@ public class ShaderLoader {
 		return shaderID;
 	}
 	
-	private static String buildShaderSource(String file) {
+	private static StringBuilder buildShaderSource(String file) {
 		StringBuilder shaderSource = new StringBuilder();
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
-			String line;
-			do {
-				line = reader.readLine();
+			String line = "";
+			while((line = reader.readLine()) != null) {
 				shaderSource.append(line).append("\n");
-			} while(line != null);
+			}
 			reader.close();
 		} catch(IOException e) {
 			System.err.println("Failure to loader shader file: " + file);
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		return shaderSource.toString();
+		return shaderSource;
 	}
 }
