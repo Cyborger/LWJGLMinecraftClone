@@ -11,11 +11,14 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import models.RawModel;
+import renderEngine.Loader;
+
 public class OBJFileLoader {
 	
-	private static final String RES_LOC = "res/";
+	private static final String RES_LOC = "res/models/";
 
-	public static ModelData loadOBJ(String objFileName) {
+	public static RawModel loadOBJ(String objFileName) {
 		FileReader isr = null;
 		File objFile = new File(RES_LOC + objFileName + ".obj");
 		try {
@@ -76,9 +79,8 @@ public class OBJFileLoader {
 		float furthest = convertDataToArrays(vertices, textures, normals, verticesArray,
 				texturesArray, normalsArray);
 		int[] indicesArray = convertIndicesListToArray(indices);
-		ModelData data = new ModelData(verticesArray, texturesArray, normalsArray, indicesArray,
-				furthest);
-		return data;
+		RawModel model = Loader.loadToVAO(verticesArray, texturesArray, indicesArray);
+		return model;
 	}
 
 	private static void processVertex(String[] vertex, List<Vertex> vertices, List<Integer> indices) {

@@ -2,13 +2,15 @@ package core;
 
 import org.lwjgl.opengl.Display;
 
+import entities.Entity;
+import models.ModelTexture;
 import models.RawModel;
 import models.TexturedModel;
+import objConverter.OBJFileLoader;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.Renderer;
 import shaders.StaticShader;
-import textures.ModelTexture;
 
 public class GameLoop {
 	
@@ -31,9 +33,11 @@ public class GameLoop {
 			1, 0
 	};
 	
-	static RawModel model;
+	static RawModel rawModel;
 	static ModelTexture texture;
 	static TexturedModel texturedModel;
+	static Entity block1;
+	static Entity block2;
 	static StaticShader shader;
 	
 	public static void main(String[] args) {
@@ -44,9 +48,9 @@ public class GameLoop {
 	
 	static void initialize() {
 		DisplayManager.CreateDisplay();
-		model = Loader.loadToVAO(vertices, textureCoords, indices);
+		rawModel = OBJFileLoader.loadOBJ("cube");
 		texture = new ModelTexture(Loader.loadTexture("dirt"));
-		texturedModel = new TexturedModel(model, texture);
+		texturedModel = new TexturedModel(rawModel, texture);
 		shader = new StaticShader();
 	}
 	
