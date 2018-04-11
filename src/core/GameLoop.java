@@ -8,7 +8,6 @@ import entities.Entity;
 import models.ModelTexture;
 import models.RawModel;
 import models.TexturedModel;
-import objConverter.OBJFileLoader;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.Renderer;
@@ -131,7 +130,7 @@ public class GameLoop {
 	
 	static void loop() {
 		while(!Display.isCloseRequested()) {
-			camera.Move();
+			camera.getInput();
 			Renderer.prepare();
 			shader.start();
 			shader.loadViewMatrix(camera);

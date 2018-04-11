@@ -75,6 +75,7 @@ public class OBJFileLoader {
 		removeUnusedVertices(vertices);
 		float[] verticesArray = new float[vertices.size() * 3];
 		float[] texturesArray = new float[vertices.size() * 2];
+		@SuppressWarnings("unused")
 		float[] normalsArray = new float[vertices.size() * 3];
 		int[] indicesArray = convertIndicesListToArray(indices);
 		RawModel model = Loader.loadToVAO(verticesArray, texturesArray, indicesArray);
@@ -102,30 +103,6 @@ public class OBJFileLoader {
 			indicesArray[i] = indices.get(i);
 		}
 		return indicesArray;
-	}
-
-	private static float convertDataToArrays(List<Vertex> vertices, List<Vector2f> textures,
-			List<Vector3f> normals, float[] verticesArray, float[] texturesArray,
-			float[] normalsArray) {
-		float furthestPoint = 0;
-		for (int i = 0; i < vertices.size(); i++) {
-			Vertex currentVertex = vertices.get(i);
-			if (currentVertex.getLength() > furthestPoint) {
-				furthestPoint = currentVertex.getLength();
-			}
-			Vector3f position = currentVertex.getPosition();
-			Vector2f textureCoord = textures.get(currentVertex.getTextureIndex());
-			Vector3f normalVector = normals.get(currentVertex.getNormalIndex());
-			verticesArray[i * 3] = position.x;
-			verticesArray[i * 3 + 1] = position.y;
-			verticesArray[i * 3 + 2] = position.z;
-			texturesArray[i * 2] = textureCoord.x;
-			texturesArray[i * 2 + 1] = 1 - textureCoord.y;
-			normalsArray[i * 3] = normalVector.x;
-			normalsArray[i * 3 + 1] = normalVector.y;
-			normalsArray[i * 3 + 2] = normalVector.z;
-		}
-		return furthestPoint;
 	}
 
 	private static void dealWithAlreadyProcessedVertex(Vertex previousVertex, int newTextureIndex,
