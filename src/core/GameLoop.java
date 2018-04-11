@@ -130,7 +130,7 @@ public class GameLoop {
 	
 	static void loop() {
 		while(!Display.isCloseRequested()) {
-			camera.getInput();
+			camera.move();
 			Renderer.prepare();
 			shader.start();
 			shader.loadViewMatrix(camera);
