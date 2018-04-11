@@ -19,7 +19,8 @@ public class DisplayManager {
 	private static float delta;
 	
 	public static void CreateDisplay() {
-		ContextAttribs attrib = new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true);
+		ContextAttribs attrib = new ContextAttribs(3,2)
+				.withForwardCompatible(true).withProfileCore(true);
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.create(new PixelFormat(), attrib);

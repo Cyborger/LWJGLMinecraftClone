@@ -16,30 +16,94 @@ import shaders.StaticShader;
 
 public class GameLoop {
 	
-	static float[] vertices = {
-		-0.5f, 0.5f, 0f,
-		-0.5f, -0.5f, 0f,
-		0.5f, -0.5f, 0f,
-		0.5f, 0.5f, 0f,
-	};
+    static float[] vertices = {            
+            -0.5f,0.5f,0,   
+            -0.5f,-0.5f,0,  
+            0.5f,-0.5f,0,   
+            0.5f,0.5f,0,        
+             
+            -0.5f,0.5f,1,   
+            -0.5f,-0.5f,1,  
+            0.5f,-0.5f,1,   
+            0.5f,0.5f,1,
+             
+            0.5f,0.5f,0,    
+            0.5f,-0.5f,0,   
+            0.5f,-0.5f,1,   
+            0.5f,0.5f,1,
+             
+            -0.5f,0.5f,0,   
+            -0.5f,-0.5f,0,  
+            -0.5f,-0.5f,1,  
+            -0.5f,0.5f,1,
+             
+            -0.5f,0.5f,1,
+            -0.5f,0.5f,0,
+            0.5f,0.5f,0,
+            0.5f,0.5f,1,
+             
+            -0.5f,-0.5f,1,
+            -0.5f,-0.5f,0,
+            0.5f,-0.5f,0,
+            0.5f,-0.5f,1
+             
+    };
+     
+    static float[] textureCoords = {
+             
+            0,0,
+            0,1,
+            1,1,
+            1,0,            
+            0,0,
+            0,1,
+            1,1,
+            1,0,            
+            0,0,
+            0,1,
+            1,1,
+            1,0,
+            0,0,
+            0,1,
+            1,1,
+            1,0,
+            0,0,
+            0,1,
+            1,1,
+            1,0,
+            0,0,
+            0,1,
+            1,1,
+            1,0
+
+             
+    };
+     
+    static int[] indices = {
+            0,1,3,  
+            3,1,2,  
+            4,5,7,
+            7,5,6,
+            8,9,11,
+            11,9,10,
+            12,13,15,
+            15,13,14,   
+            16,17,19,
+            19,17,18,
+            20,21,23,
+            23,21,22
+
+    };
 	
-	static int[] indices = {
-			0, 1, 3,
-			3, 1, 2
-	};
-	
-	static float[] textureCoords = {
-			0, 0,
-			0, 1,
-			1, 1,
-			1, 0
-	};
-	
-	static RawModel rawModel;
-	static ModelTexture texture;
-	static TexturedModel texturedModel;
-	static Entity block1;
-	static Entity block2;
+	static RawModel cubeModel;
+	static ModelTexture dirtTexture;
+	static ModelTexture sandTexture;
+	static TexturedModel dirtModel;
+	static TexturedModel sandModel;
+	static Entity dirtEntity1;
+	static Entity dirtEntity2;
+	static Entity sandEntity1;
+	static Entity sandEntity2;
 	static Camera camera;
 	static StaticShader shader;
 	
@@ -51,12 +115,18 @@ public class GameLoop {
 	
 	static void initialize() {
 		DisplayManager.CreateDisplay();
-		rawModel = OBJFileLoader.loadOBJ("cube");
-		texture = new ModelTexture(Loader.loadTexture("dirt"));
-		texturedModel = new TexturedModel(rawModel, texture);
-		block1 = new Entity(texturedModel, new Vector3f(0, 0, 0), 0, 0, 0, 1);
-		camera = new Camera();
 		shader = new StaticShader();
+		Renderer.initialize(shader);
+		cubeModel = Loader.loadToVAO(vertices, textureCoords, indices);
+		dirtTexture = new ModelTexture(Loader.loadTexture("dirt"));
+		sandTexture = new ModelTexture(Loader.loadTexture("sand"));
+		dirtModel = new TexturedModel(cubeModel, dirtTexture);
+		sandModel = new TexturedModel(cubeModel, sandTexture);
+		dirtEntity1 = new Entity(dirtModel, new Vector3f(0, 0, 0), 0, 0, 0, 1);
+		dirtEntity2 = new Entity(dirtModel, new Vector3f(1, 0, 1), 0, 0, 0, 1);
+		sandEntity1 = new Entity(sandModel, new Vector3f(1, 0, 0), 0, 0, 0, 1);
+		sandEntity2 = new Entity(sandModel, new Vector3f(0, 0, 1), 0, 0, 0, 1);
+		camera = new Camera();
 	}
 	
 	static void loop() {
@@ -64,8 +134,11 @@ public class GameLoop {
 			camera.Move();
 			Renderer.prepare();
 			shader.start();
-			Renderer.render(block1, shader);
 			shader.loadViewMatrix(camera);
+			Renderer.render(dirtEntity1, shader);
+			Renderer.render(dirtEntity2, shader);
+			Renderer.render(sandEntity1, shader);
+			Renderer.render(sandEntity2, shader);
 			shader.stop();
 			DisplayManager.UpdateDisplay();
 		}

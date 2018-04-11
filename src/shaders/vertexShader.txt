@@ -3,8 +3,8 @@
 in vec3 position;
 in vec2 textureCoords;
 
+out vec3 color;
 out vec2 passedTextureCoords;
-out vec3 toCameraVector;
 
 uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
@@ -14,5 +14,5 @@ void main(void) {
 	vec4 worldPosition = transformationMatrix * vec4(position, 1.0);
 	gl_Position = projectionMatrix * viewMatrix * worldPosition;
 	passedTextureCoords = textureCoords;
-	toCameraVector = (inverse(viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz;
+	color = vec3(position.x + 0.5, 0.0, position.y+0.5);
 }
