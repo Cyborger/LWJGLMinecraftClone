@@ -10,6 +10,8 @@ public class Camera {
 	private float pitch;
 	private float yaw;
 	private float roll;
+	private float pitchOffset;
+	private float yawOffset;
 	
 	public void getInput() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
@@ -30,7 +32,12 @@ public class Camera {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			position.y -= 0.2f;
 		}
-		pitch += Mouse.getDWheel() * 0.05;
+		pitchOffset = -Mouse.getDY();
+		yawOffset = Mouse.getDX();
+		pitch += pitchOffset * 0.05;
+		yaw += yawOffset * 0.05;
+		Mouse.setGrabbed(true);
+		
 	}
 
 	public Vector3f getPosition() {
