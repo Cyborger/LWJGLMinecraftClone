@@ -11,6 +11,7 @@ public class Camera
 	private float pitch;
 	private float yaw;
 	private float roll;
+	private float speed = 0.15f;
 
 	public void move()
 	{
@@ -25,32 +26,32 @@ public class Camera
 		{
 			float toZ = ((float)Math.sin( Math.toRadians(yaw+90))) ;
 			float toX = ((float)Math.cos( Math.toRadians(yaw+90))) ;
-			position.x -= toX * 0.05;
-			position.z -= toZ * 0.05;
+			position.x -= toX * speed;
+			position.z -= toZ * speed;
 
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_S)) 
 		{
 			float toZ = ((float)Math.sin( Math.toRadians(yaw+90))) ;
 			float toX = ((float)Math.cos( Math.toRadians(yaw+90))) ;
-			position.x += toX * 0.05;
-			position.z += toZ * 0.05;
+			position.x += toX * speed;
+			position.z += toZ * speed;
 		}
 
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) 
 		{
 			float toZ = ((float)Math.sin( Math.toRadians(yaw))) ;
 			float toX = ((float)Math.cos( Math.toRadians(yaw))) ;
-			position.x += toX * 0.05;
-			position.z += toZ * 0.05;
+			position.x += toX * speed;
+			position.z += toZ * speed;
 		}
 
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) 
 		{
 			float toZ = ((float)Math.sin( Math.toRadians(yaw))) ;
 			float toX = ((float)Math.cos( Math.toRadians(yaw))) ;
-			position.x -= toX * 0.05;
-			position.z -= toZ * 0.05;
+			position.x -= toX * speed;
+			position.z -= toZ * speed;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) 
 		{
