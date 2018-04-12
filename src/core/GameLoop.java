@@ -5,9 +5,12 @@ import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
 import entities.Entity;
+import entities.Light;
 import models.ModelTexture;
 import models.RawModel;
 import models.TexturedModel;
+import objConverter.OBJFileLoader;
+import objConverter.OBJLoader;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.Renderer;
@@ -103,6 +106,7 @@ public class GameLoop {
 	static Entity dirtEntity2;
 	static Entity sandEntity1;
 	static Entity sandEntity2;
+	static Light light;
 	static Camera camera;
 	static StaticShader shader;
 	
@@ -116,7 +120,7 @@ public class GameLoop {
 		DisplayManager.CreateDisplay();
 		shader = new StaticShader();
 		Renderer.initialize(shader);
-		cubeModel = Loader.loadToVAO(vertices, textureCoords, indices);
+		cubeModel = OBJLoader.loadObjModel("cube");
 		dirtTexture = new ModelTexture(Loader.loadTexture("dirt"));
 		sandTexture = new ModelTexture(Loader.loadTexture("sand"));
 		dirtModel = new TexturedModel(cubeModel, dirtTexture);
@@ -125,6 +129,7 @@ public class GameLoop {
 		dirtEntity2 = new Entity(dirtModel, new Vector3f(1, 0, 1), 0, 0, 0, 1);
 		sandEntity1 = new Entity(sandModel, new Vector3f(1, 0, 0), 0, 0, 0, 1);
 		sandEntity2 = new Entity(sandModel, new Vector3f(0, 0, 1), 0, 0, 0, 1);
+		light = new Light(new Vector3f(0, 500, -20), new Vector3f(1, 1, 1));
 		camera = new Camera();
 	}
 	
@@ -133,6 +138,7 @@ public class GameLoop {
 			camera.move();
 			Renderer.prepare();
 			shader.start();
+			shader.loadLight(light);
 			shader.loadViewMatrix(camera);
 			Renderer.render(dirtEntity1, shader);
 			Renderer.render(dirtEntity2, shader);
