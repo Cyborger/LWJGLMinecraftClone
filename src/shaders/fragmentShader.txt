@@ -14,7 +14,7 @@ void main(void) {
 	vec3 unitLightVector = normalize(toLightVector);
 	
 	float dotProduct = dot(unitNormal, unitLightVector);
-	float brightness = max(dotProduct, 0.0);
+	float brightness = max(dotProduct, 0.4);
 	vec3 diffuse = brightness * lightColor;
 	out_Color = vec4(diffuse, 1.0) * texture(textureSampler, passedTextureCoords);
 }

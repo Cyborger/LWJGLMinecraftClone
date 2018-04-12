@@ -18,85 +18,6 @@ import shaders.StaticShader;
 
 public class GameLoop {
 	
-    static float[] vertices = {            
-            -0.5f,0.5f,0,   
-            -0.5f,-0.5f,0,  
-            0.5f,-0.5f,0,   
-            0.5f,0.5f,0,        
-             
-            -0.5f,0.5f,1,   
-            -0.5f,-0.5f,1,  
-            0.5f,-0.5f,1,   
-            0.5f,0.5f,1,
-             
-            0.5f,0.5f,0,    
-            0.5f,-0.5f,0,   
-            0.5f,-0.5f,1,   
-            0.5f,0.5f,1,
-             
-            -0.5f,0.5f,0,   
-            -0.5f,-0.5f,0,  
-            -0.5f,-0.5f,1,  
-            -0.5f,0.5f,1,
-             
-            -0.5f,0.5f,1,
-            -0.5f,0.5f,0,
-            0.5f,0.5f,0,
-            0.5f,0.5f,1,
-             
-            -0.5f,-0.5f,1,
-            -0.5f,-0.5f,0,
-            0.5f,-0.5f,0,
-            0.5f,-0.5f,1
-             
-    };
-     
-    static float[] textureCoords = {
-             
-            0,0,
-            0,1,
-            1,1,
-            1,0,            
-            0,0,
-            0,1,
-            1,1,
-            1,0,            
-            0,0,
-            0,1,
-            1,1,
-            1,0,
-            0,0,
-            0,1,
-            1,1,
-            1,0,
-            0,0,
-            0,1,
-            1,1,
-            1,0,
-            0,0,
-            0,1,
-            1,1,
-            1,0
-
-             
-    };
-     
-    static int[] indices = {
-            0,1,3,  
-            3,1,2,  
-            4,5,7,
-            7,5,6,
-            8,9,11,
-            11,9,10,
-            12,13,15,
-            15,13,14,   
-            16,17,19,
-            19,17,18,
-            20,21,23,
-            23,21,22
-
-    };
-	
 	static RawModel cubeModel;
 	static ModelTexture dirtTexture;
 	static ModelTexture sandTexture;
@@ -129,7 +50,7 @@ public class GameLoop {
 		dirtEntity2 = new Entity(dirtModel, new Vector3f(1, 0, 1), 0, 0, 0, 1);
 		sandEntity1 = new Entity(sandModel, new Vector3f(1, 0, 0), 0, 0, 0, 1);
 		sandEntity2 = new Entity(sandModel, new Vector3f(0, 0, 1), 0, 0, 0, 1);
-		light = new Light(new Vector3f(0, 500, -20), new Vector3f(1, 1, 1));
+		light = new Light(new Vector3f(0, 0, 20), new Vector3f(1, 1, 1));
 		camera = new Camera();
 	}
 	
@@ -138,8 +59,9 @@ public class GameLoop {
 			camera.move();
 			Renderer.prepare();
 			shader.start();
-			shader.loadLight(light);
+			
 			shader.loadViewMatrix(camera);
+			shader.loadLight(light);
 			Renderer.render(dirtEntity1, shader);
 			Renderer.render(dirtEntity2, shader);
 			Renderer.render(sandEntity1, shader);

@@ -21,5 +21,4 @@ void main(void) {
 	
 	surfaceNormal = (transformationMatrix * vec4(normal, 0.0)).xyz;
 	toLightVector = lightPosition - worldPosition.xyz;
-	
 }

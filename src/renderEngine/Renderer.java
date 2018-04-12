@@ -37,20 +37,29 @@ public class Renderer {
 	}
 	
 	public static void render(Entity entity, StaticShader shader) {
-		TexturedModel model = entity.getModel();
-		RawModel rawModel = model.getModel();
+		prepareModel(entity.getModel());
+		Matrix4f transformationMatrix = MatrixMath.createTransformationMatrix(entity.getPosition(),
+				entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
+		shader.loadTransformationMatrix(transformationMatrix);
+		GL11.glDrawElements(GL11.GL_TRIANGLES, entity.getModel().getRawModel().getVertexCount(),
+				GL11.GL_UNSIGNED_INT, 0);
+		unbindModel();
+	}
+	
+	private static void prepareModel(TexturedModel model) {
+		RawModel rawModel = model.getRawModel();
 		ModelTexture texture = model.getTexture();
+		
 		GL30.glBindVertexArray(rawModel.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(1);
 		GL20.glEnableVertexAttribArray(2);
-		Matrix4f transformationMatrix = MatrixMath.createTransformationMatrix(entity.getPosition(),
-				entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
-		shader.loadTransformationMatrix(transformationMatrix);
+		
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D,  texture.getID());
-		GL11.glDrawElements(GL11.GL_TRIANGLES, rawModel.getVertexCount(),
-				GL11.GL_UNSIGNED_INT, 0);
+	}
+	
+	private static void unbindModel() {
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);
 		GL20.glDisableVertexAttribArray(2);
