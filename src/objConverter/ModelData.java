@@ -1,15 +1,15 @@
 package objConverter;
 
 public class ModelData {
-	
+
 	private float[] vertices;
 	private float[] textureCoords;
 	private float[] normals;
 	private int[] indices;
 	private float furthestPoint;
-	
-	public ModelData(float[] vertices, float[] textureCoords, float[] normals, int[] indices, float furthestPoint) {
-		super();
+
+	public ModelData(float[] vertices, float[] textureCoords, float[] normals, int[] indices,
+			float furthestPoint) {
 		this.vertices = vertices;
 		this.textureCoords = textureCoords;
 		this.normals = normals;
@@ -36,7 +36,5 @@ public class ModelData {
 	public float getFurthestPoint() {
 		return furthestPoint;
 	}
-	
-	
-	
+
 }

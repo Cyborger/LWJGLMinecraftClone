@@ -11,20 +11,17 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import models.RawModel;
-import renderEngine.Loader;
-
 public class OBJFileLoader {
 	
 	private static final String RES_LOC = "res/models/";
 
-	public static RawModel loadOBJ(String objFileName) {
+	public static ModelData loadOBJ(String objFileName) {
 		FileReader isr = null;
 		File objFile = new File(RES_LOC + objFileName + ".obj");
 		try {
 			isr = new FileReader(objFile);
 		} catch (FileNotFoundException e) {
-			System.err.println("OBJ file could not be found");
+			System.err.println("File not found in res; don't use any extention");
 		}
 		BufferedReader reader = new BufferedReader(isr);
 		String line;
@@ -42,6 +39,7 @@ public class OBJFileLoader {
 							(float) Float.valueOf(currentLine[3]));
 					Vertex newVertex = new Vertex(vertices.size(), vertex);
 					vertices.add(newVertex);
+
 				} else if (line.startsWith("vt ")) {
 					String[] currentLine = line.split(" ");
 					Vector2f texture = new Vector2f((float) Float.valueOf(currentLine[1]),
@@ -75,12 +73,12 @@ public class OBJFileLoader {
 		float[] verticesArray = new float[vertices.size() * 3];
 		float[] texturesArray = new float[vertices.size() * 2];
 		float[] normalsArray = new float[vertices.size() * 3];
-		convertDataToArrays(vertices, textures, normals, verticesArray,
+		float furthest = convertDataToArrays(vertices, textures, normals, verticesArray,
 				texturesArray, normalsArray);
 		int[] indicesArray = convertIndicesListToArray(indices);
-		RawModel model = Loader.loadToVAO(verticesArray, texturesArray, 
-				normalsArray, indicesArray);
-		return model;
+		ModelData data = new ModelData(verticesArray, texturesArray, normalsArray, indicesArray,
+				furthest);
+		return data;
 	}
 
 	private static void processVertex(String[] vertex, List<Vertex> vertices, List<Integer> indices) {
@@ -106,24 +104,30 @@ public class OBJFileLoader {
 		return indicesArray;
 	}
 
-    private static void convertDataToArrays(List<Vertex> vertices, List<Vector2f> textures,
-            List<Vector3f> normals, float[] verticesArray, float[] texturesArray,
-            float[] normalsArray) {
-        for (int i = 0; i < vertices.size(); i++) {
-            Vertex currentVertex = vertices.get(i);
-            Vector3f position = currentVertex.getPosition();
-            Vector2f textureCoord = textures.get(currentVertex.getTextureIndex());
-            Vector3f normalVector = normals.get(currentVertex.getNormalIndex());
-            verticesArray[i * 3] = position.x;
-            verticesArray[i * 3 + 1] = position.y;
-            verticesArray[i * 3 + 2] = position.z;
-            texturesArray[i * 2] = textureCoord.x;
-            texturesArray[i * 2 + 1] = 1 - textureCoord.y;
-            normalsArray[i * 3] = normalVector.x;
-            normalsArray[i * 3 + 1] = normalVector.y;
-            normalsArray[i * 3 + 2] = normalVector.z;
-        }
-    }
+	private static float convertDataToArrays(List<Vertex> vertices, List<Vector2f> textures,
+			List<Vector3f> normals, float[] verticesArray, float[] texturesArray,
+			float[] normalsArray) {
+		float furthestPoint = 0;
+		for (int i = 0; i < vertices.size(); i++) {
+			Vertex currentVertex = vertices.get(i);
+			if (currentVertex.getLength() > furthestPoint) {
+				furthestPoint = currentVertex.getLength();
+			}
+			Vector3f position = currentVertex.getPosition();
+			Vector2f textureCoord = textures.get(currentVertex.getTextureIndex());
+			Vector3f normalVector = normals.get(currentVertex.getNormalIndex());
+			verticesArray[i * 3] = position.x;
+			verticesArray[i * 3 + 1] = position.y;
+			verticesArray[i * 3 + 2] = position.z;
+			texturesArray[i * 2] = textureCoord.x;
+			texturesArray[i * 2 + 1] = 1 - textureCoord.y;
+			normalsArray[i * 3] = normalVector.x;
+			normalsArray[i * 3 + 1] = normalVector.y;
+			normalsArray[i * 3 + 2] = normalVector.z;
+		}
+		return furthestPoint;
+	}
+
 	private static void dealWithAlreadyProcessedVertex(Vertex previousVertex, int newTextureIndex,
 			int newNormalIndex, List<Integer> indices, List<Vertex> vertices) {
 		if (previousVertex.hasSameTextureAndNormal(newTextureIndex, newNormalIndex)) {
@@ -153,5 +157,5 @@ public class OBJFileLoader {
 			}
 		}
 	}
-	
+
 }
