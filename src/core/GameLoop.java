@@ -14,11 +14,9 @@ import models.RawModel;
 import models.TexturedModel;
 import objConverter.ModelData;
 import objConverter.OBJFileLoader;
-import objConverter.OBJLoader;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
-import shaders.StaticShader;
 
 public class GameLoop {
 	
@@ -51,6 +49,7 @@ public class GameLoop {
 		entities.add(new Entity(dirtModel, new Vector3f(0, 0, 0), 0, 0, 0, 1));
 		light = new Light(new Vector3f(0, 0, 20), new Vector3f(1, 1, 1));
 		camera = new Camera();
+		generateTerrain();
 	}
 	
 	static void loop() {
@@ -67,5 +66,13 @@ public class GameLoop {
 	static void cleanUp() {
 		renderer.cleanUp();
 		DisplayManager.CloseDisplay();
+	}
+	
+	static void generateTerrain() {
+		for (int x = 0; x < 200; ++x) {
+			for (int z = 0; z < 200; ++z) {
+				entities.add(new Entity(dirtModel, new Vector3f(x, 0, z), 0, 0, 0, 1));
+			}
+		}
 	}
 }

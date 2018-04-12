@@ -27,7 +27,6 @@ public class MasterRenderer {
 	
 	private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel,
 			List<Entity>>();
-	private List<TexturedModel> models = new ArrayList<TexturedModel>();
 	
 	public MasterRenderer() {
 		enableCulling();
