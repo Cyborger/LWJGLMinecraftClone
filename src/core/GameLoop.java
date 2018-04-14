@@ -18,9 +18,9 @@ import renderEngine.MasterRenderer;
 
 public class GameLoop {
 	
-	static MasterRenderer renderer;  // Not crazy about a "master" renderer
+	static MasterRenderer renderer;
 	static Loader loader;
-	static RawModel cubeModel;  // No rawmodel / texturemodel, just model
+	static RawModel cubeModel;
 	static Texture dirtTexture;
 	static Texture sandTexture;
 	static TexturedModel dirtModel;
@@ -45,7 +45,7 @@ public class GameLoop {
 		dirtModel = new TexturedModel(cubeModel, dirtTexture);
 		sandModel = new TexturedModel(cubeModel, sandTexture);
 		light = new Light(new Vector3f(0, 100, 100), new Vector3f(1, 1, 1));
-		camera = new Camera(new Vector3f(0, 0, 0));
+		camera = new Camera(new Vector3f(16, 34, 16));
 		generateTerrain();
 	}
 	

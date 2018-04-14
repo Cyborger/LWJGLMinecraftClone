@@ -11,7 +11,7 @@ public class Camera
 	private float pitch;
 	private float yaw;
 	private float roll;
-	private float speed = 0.5f;
+	private float speed = 0.2f;
 
 	public Camera(Vector3f startPosition) {
 		this.position = startPosition;
