@@ -3,9 +3,9 @@ package models;
 public class TexturedModel {
 	
 	private RawModel model;
-	private ModelTexture texture;
+	private Texture texture;
 	
-	public TexturedModel(RawModel model, ModelTexture texture) {
+	public TexturedModel(RawModel model, Texture texture) {
 		super();
 		this.model = model;
 		this.texture = texture;
@@ -13,7 +13,7 @@ public class TexturedModel {
 	public RawModel getRawModel() {
 		return model;
 	}
-	public ModelTexture getTexture() {
+	public Texture getTexture() {
 		return texture;
 	}
 	

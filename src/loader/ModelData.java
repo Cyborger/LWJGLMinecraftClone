@@ -1,20 +1,18 @@
-package objConverter;
+package loader;
 
-public class ModelData {
+class ModelData {
 
 	private float[] vertices;
 	private float[] textureCoords;
 	private float[] normals;
 	private int[] indices;
-	private float furthestPoint;
 
-	public ModelData(float[] vertices, float[] textureCoords, float[] normals, int[] indices,
-			float furthestPoint) {
+	public ModelData(float[] vertices, float[] textureCoords, float[] normals, 
+			int[] indices) {
 		this.vertices = vertices;
 		this.textureCoords = textureCoords;
 		this.normals = normals;
 		this.indices = indices;
-		this.furthestPoint = furthestPoint;
 	}
 
 	public float[] getVertices() {
@@ -32,9 +30,4 @@ public class ModelData {
 	public int[] getIndices() {
 		return indices;
 	}
-
-	public float getFurthestPoint() {
-		return furthestPoint;
-	}
-
 }

@@ -9,21 +9,20 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
-import models.ModelTexture;
+import loader.Loader;
+import models.Texture;
 import models.RawModel;
 import models.TexturedModel;
-import objConverter.ModelData;
-import objConverter.OBJFileLoader;
 import renderEngine.DisplayManager;
-import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 
 public class GameLoop {
 	
-	static MasterRenderer renderer;
-	static RawModel cubeModel;
-	static ModelTexture dirtTexture;
-	static ModelTexture sandTexture;
+	static MasterRenderer renderer;  // Not crazy about a "master" renderer
+	static Loader loader;
+	static RawModel cubeModel;  // No rawmodel / texturemodel, just model
+	static Texture dirtTexture;
+	static Texture sandTexture;
 	static TexturedModel dirtModel;
 	static TexturedModel sandModel;
 	static Light light;
@@ -31,24 +30,22 @@ public class GameLoop {
 	static List<Entity> entities = new ArrayList<Entity>();;
 	
 	public static void main(String[] args) {
-		initialize();
+		setup();
 		loop();
 		cleanUp();
 	}
 	
-	static void initialize() {
+	static void setup() {
 		DisplayManager.CreateDisplay();
 		renderer = new MasterRenderer();
-		ModelData modelData = OBJFileLoader.loadOBJ("cube");
-		cubeModel = Loader.loadToVAO(modelData.getVertices(), modelData.getTextureCoords(),
-				modelData.getNormals(), modelData.getIndices());
-		dirtTexture = new ModelTexture(Loader.loadTexture("dirt"));
-		sandTexture = new ModelTexture(Loader.loadTexture("sand"));
+		loader = new Loader();
+		cubeModel = loader.loadOBJ("cube");
+		dirtTexture = new Texture(loader.loadTexture("grass"));
+		sandTexture = new Texture(loader.loadTexture("sand"));
 		dirtModel = new TexturedModel(cubeModel, dirtTexture);
 		sandModel = new TexturedModel(cubeModel, sandTexture);
-		entities.add(new Entity(dirtModel, new Vector3f(0, 0, 0), 0, 0, 0, 1));
-		light = new Light(new Vector3f(0, 0, 20), new Vector3f(1, 1, 1));
-		camera = new Camera();
+		light = new Light(new Vector3f(0, 100, 100), new Vector3f(1, 1, 1));
+		camera = new Camera(new Vector3f(0, 0, 0));
 		generateTerrain();
 	}
 	
@@ -60,18 +57,23 @@ public class GameLoop {
 			}
 			renderer.render(light, camera);
 			DisplayManager.UpdateDisplay();
+			System.out.println(DisplayManager.getDeltaInMilliseconds());
 		}
 	}
 	
 	static void cleanUp() {
 		renderer.cleanUp();
+		loader.cleanUp();
 		DisplayManager.CloseDisplay();
 	}
 	
 	static void generateTerrain() {
-		for (int x = 0; x < 200; ++x) {
-			for (int z = 0; z < 200; ++z) {
-				entities.add(new Entity(dirtModel, new Vector3f(x, 0, z), 0, 0, 0, 1));
+		int size = 16;
+		for (int x = 0; x < size; ++x) {
+			for (int y = 0; y < size; ++y) {
+				for (int z = 0; z < size; ++z) {
+					entities.add(new Entity(dirtModel, new Vector3f(x*2, y*2, z*2), 0, 0, 0, 1));
+				}
 			}
 		}
 	}

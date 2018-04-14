@@ -1,8 +1,8 @@
-package objConverter;
+package loader;
 
 import org.lwjgl.util.vector.Vector3f;
 
-public class Vertex {
+class Vertex {
 	
 	private static final int NO_INDEX = -1;
 	
@@ -13,7 +13,7 @@ public class Vertex {
 	private int index;
 	private float length;
 	
-	public Vertex(int index,Vector3f position){
+	public Vertex(int index, Vector3f position){
 		this.index = index;
 		this.position = position;
 		this.length = position.length();
@@ -62,5 +62,4 @@ public class Vertex {
 	public void setDuplicateVertex(Vertex duplicateVertex) {
 		this.duplicateVertex = duplicateVertex;
 	}
-
 }

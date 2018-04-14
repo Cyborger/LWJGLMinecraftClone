@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 
 import entities.Entity;
-import models.ModelTexture;
+import models.Texture;
 import models.RawModel;
 import models.TexturedModel;
 import shaders.StaticShader;
@@ -42,7 +42,7 @@ public class EntityRenderer {
 	
 	private static void prepareModel(TexturedModel model) {
 		RawModel rawModel = model.getRawModel();
-		ModelTexture texture = model.getTexture();
+		Texture texture = model.getTexture();
 		
 		GL30.glBindVertexArray(rawModel.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
