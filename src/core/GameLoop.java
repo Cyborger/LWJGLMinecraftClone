@@ -17,10 +17,9 @@ import terrain.Chunk;
 public class GameLoop {
 	
 	static MasterRenderer renderer;
-	static Chunk testChunk;
 	static Light light;
 	static Camera camera;
-	static List<Entity> entities = new ArrayList<Entity>();;
+	static List<Chunk> chunks = new ArrayList<Chunk>();
 	
 	public static void main(String[] args) {
 		setup();
@@ -33,14 +32,16 @@ public class GameLoop {
 		renderer = new MasterRenderer();
 		light = new Light(new Vector3f(0, 100, 100), new Vector3f(1, 1, 1));
 		camera = new Camera(new Vector3f(16, 34, 16));
-		testChunk = new Chunk();
+		chunks.add(new Chunk());
 	}
 	
 	static void loop() {
 		while(!Display.isCloseRequested()) {
 			camera.move();
-			for (Entity entity : testChunk.getEntities()) {
-				renderer.processEntity(entity);
+			for (Chunk chunk : chunks) {
+				for (Entity entity : chunk.getEntities()) {
+					renderer.processEntity(entity);
+				}
 			}
 			renderer.render(light, camera);
 			DisplayManager.UpdateDisplay();
