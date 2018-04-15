@@ -1,6 +1,6 @@
-package loader;
+package loader.objLoader;
 
-class ModelData {
+public class ModelData {
 
 	private float[] vertices;
 	private float[] textureCoords;

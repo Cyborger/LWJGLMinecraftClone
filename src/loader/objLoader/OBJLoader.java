@@ -1,4 +1,4 @@
-package loader;
+package loader.objLoader;
 
 import java.io.BufferedReader;
 import java.io.File;

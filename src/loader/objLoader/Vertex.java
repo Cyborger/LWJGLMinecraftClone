@@ -1,4 +1,4 @@
-package loader;
+package loader.objLoader;
 
 import org.lwjgl.util.vector.Vector3f;
 
