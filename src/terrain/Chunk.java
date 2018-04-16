@@ -5,16 +5,20 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import entities.Block;
 import entities.DirtBlock;
-import entities.Entity;
 
 public class Chunk {
 	
-	private List<Entity> entities = new ArrayList<Entity>();
-	private List<Vector3f> blockList = new ArrayList<Vector3f>();
 	private final int SIZE = 16;
+	private int chunk_x;
+	private int chunk_z;
+	private Block[][][] blockArray = new Block[SIZE][SIZE][SIZE];
+	private List<Block> blocksToRender = new ArrayList<Block>();
 	
-	public Chunk() {
+	public Chunk(int x, int z) {
+		this.chunk_x = x;
+		this.chunk_z = z;
 		generateBlocks();
 	}
 	
@@ -22,32 +26,17 @@ public class Chunk {
 		for (int x = 0; x < SIZE; ++x) {
 			for (int y = 0; y < SIZE; ++y) {
 				for (int z = 0; z < SIZE; ++z) {
-					entities.add(new DirtBlock(new Vector3f(x*2, y*2, z*2)));
-					blockList.add(new Vector3f(x*2, y*2, z*2));
-					
-					
+					Block dirtBlock =  new DirtBlock(new Vector3f(chunk_x + x*2, y*2, chunk_z + z*2));
+					blockArray[z][y][x] = dirtBlock;
+					if(z == 0 || x == 0 || y == 0 || z == SIZE - 1 || x == SIZE - 1 || y == SIZE - 1) {
+						blocksToRender.add(dirtBlock);
+					}
 				}
 			}
 		}
-		System.out.println(blockList);
 	}
 	
-	public List<Entity> getEntities() {
-		return entities;
+	public List<Block> getBlocksToRender() {
+		return blocksToRender;
 	}
-
-	public List<Vector3f> getBlockList() {
-		return blockList;
-	}
-	
-	public boolean checkForSurroundingBlocks(int i) {
-		Vector3f currentChunk = blockList.get(i);
-		if(blockList.contains(new Vector3f(currentChunk.x/2, currentChunk.y/2, currentChunk.z/2)) &&
-			blockList.contains(new Vector3f(currentChunk.x*2, currentChunk.y*2, currentChunk.z*2))) {
-			return true;
-		}
-		return false;
-	}
-	
-	
 }

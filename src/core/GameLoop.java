@@ -1,25 +1,23 @@
 package core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import entities.Block;
 import entities.Camera;
-import entities.Entity;
 import entities.Light;
 import loader.Loader;
 import renderEngine.DisplayManager;
 import renderEngine.MasterRenderer;
 import terrain.Chunk;
+import terrain.ChunkManager;
 
 public class GameLoop {
 	
 	static MasterRenderer renderer;
 	static Light light;
 	static Camera camera;
-	static List<Chunk> chunks = new ArrayList<Chunk>();
+	static ChunkManager chunkManager;
 	
 	public static void main(String[] args) {
 		setup();
@@ -30,24 +28,23 @@ public class GameLoop {
 	static void setup() {
 		DisplayManager.CreateDisplay();
 		renderer = new MasterRenderer();
-		light = new Light(new Vector3f(0, 100, 100), new Vector3f(1, 1, 1));
+		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
 		camera = new Camera(new Vector3f(16, 34, 16));
-		chunks.add(new Chunk());
+		chunkManager = new ChunkManager();
+		chunkManager.createChunks(4, 4);
 	}
 	
 	static void loop() {
 		while(!Display.isCloseRequested()) {
 			camera.move();
-			for (int i = 0; i < chunks.size(); i ++) {
-				Chunk chunk = chunks.get(i);
-				if(chunk.checkForSurroundingBlocks(i)) {
-					for (Entity entity : chunk.getEntities()) {
-						renderer.processEntity(entity);
-					}
+			for (Chunk chunk : chunkManager.getChunks()) {
+				for (Block block : chunk.getBlocksToRender()) {
+					renderer.processEntity(block);
 				}
 			}
 			renderer.render(light, camera);
 			DisplayManager.UpdateDisplay();
+			System.out.println(DisplayManager.getDeltaInMilliseconds());
 		}
 	}
 	
