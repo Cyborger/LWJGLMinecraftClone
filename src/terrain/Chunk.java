@@ -35,56 +35,51 @@ public class Chunk {
 
 	public void addBlock(Block block, int x, int y, int z) {
 		blockArray[x][y][z] = block;
-		updateBlockNeighborFlags(x, y, z);
-		updateBlockNeighborFlags(x + 1, y, z);
-		updateBlockNeighborFlags(x - 1, y, z);
-		updateBlockNeighborFlags(x, y + 1, z);
-		updateBlockNeighborFlags(x, y - 1, z);
-		updateBlockNeighborFlags(x, y, z + 1);
-		updateBlockNeighborFlags(x, y, z - 1);
-
+		checkBlockNeighbors(x, y, z);
+		checkBlockNeighbors(x + 1, y, z);
+		checkBlockNeighbors(x - 1, y, z);
+		checkBlockNeighbors(x, y + 1, z);
+		checkBlockNeighbors(x, y - 1, z);
+		checkBlockNeighbors(x, y, z + 1);
+		checkBlockNeighbors(x, y, z - 1);
 	}
 
-	private void updateBlockNeighborFlags(int x, int y, int z) {
-		if (!spotTaken(x, y, z))
-			return;
+	public void checkBlockNeighbors(int x, int y, int z) {
+		if (!spotInBlockArrayFilled(x, y, z)) return;
+		
 		Block block = blockArray[x][y][z];
-		if (spotTaken(x + 1, y, z))
+		if (spotInBlockArrayFilled(x + 1, y, z))
 			block.hasXPNeighbor = true;
-		if (spotTaken(x - 1, y, z))
+		if (spotInBlockArrayFilled(x - 1, y, z))
 			block.hasXMNeighbor = true;
-		if (spotTaken(x, y + 1, z))
+		if (spotInBlockArrayFilled(x, y + 1, z))
 			block.hasYPNeighbor = true;
-		if (spotTaken(x, y - 1, z))
+		if (spotInBlockArrayFilled(x, y - 1, z))
 			block.hasYMNeighbor = true;
-		if (spotTaken(x, y, z + 1))
+		if (spotInBlockArrayFilled(x, y, z + 1))
 			block.hasZPNeighbor = true;
-		if (spotTaken(x, y, z - 1))
+		if (spotInBlockArrayFilled(x, y, z - 1))
 			block.hasZMNeighbor = true;
-		if (block.shouldRender()) {
+		
+		if (block.shouldRender() && !blocksToRender.contains(block)) {
 			blocksToRender.add(block);
+		} else if (!block.shouldRender() && blocksToRender.contains(block)) {
+			blocksToRender.remove(block);
 		}
 	}
-
-	private boolean spotTaken(int x, int y, int z) {
-		if (!validIndexOfBlockArray(x, y, z)) {
-			return false;
-		}
-		if (blockArray[x][y][z] == null) {
-			return false;
+	
+	private boolean spotInBlockArrayFilled(int x, int y, int z) {
+		if (x >= 0 && x < SIZE && y >= 0 && y < SIZE && z >= 0 && z < SIZE) {
+			if (blockArray[x][y][z] == null) {
+				return false;
+			} else {
+				return true;
+			}
 		} else {
-			return true;
-		}
-	}
-
-	private boolean validIndexOfBlockArray(int x, int y, int z) {
-		if (x < 0 || x >= SIZE || y < 0 || y >= SIZE || z < 0 || z >= SIZE) {
 			return false;
-		} else {
-			return true;
 		}
 	}
-
+	
 	public List<Block> getBlocksToRender() {
 		return blocksToRender;
 	}

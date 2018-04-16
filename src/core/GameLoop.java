@@ -31,7 +31,7 @@ public class GameLoop {
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
 		camera = new Camera(new Vector3f(16, 34, 16));
 		chunkManager = new ChunkManager();
-		chunkManager.createChunks(2, 2);
+		chunkManager.createChunks(1, 1);
 	}
 
 	static void loop() {

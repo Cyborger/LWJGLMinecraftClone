@@ -17,15 +17,19 @@ public abstract class Block extends Entity {
 	}
 
 	public boolean shouldRender() {
-		if (!(allBoolsTrue(hasXPNeighbor, hasXMNeighbor, hasYPNeighbor, hasYMNeighbor, hasZPNeighbor, hasZMNeighbor))) {
-			return true;
-		} else {
+		if (allBoolsTrue(hasXPNeighbor, hasXMNeighbor, hasYPNeighbor, hasYMNeighbor, hasZPNeighbor, hasZMNeighbor)) {
 			return false;
+		} else {
+			return true;
 		}
 	}
 	
 	private boolean allBoolsTrue(boolean... args) {
-		for (boolean bool : args) if(!bool) return false;
+		for (boolean bool : args) {
+			if(bool == false) {
+				return false;
+			}
+		}
 		return true;
 	}
 }
