@@ -13,29 +13,29 @@ import terrain.Chunk;
 import terrain.ChunkManager;
 
 public class GameLoop {
-	
+
 	static MasterRenderer renderer;
 	static Light light;
 	static Camera camera;
 	static ChunkManager chunkManager;
-	
+
 	public static void main(String[] args) {
 		setup();
 		loop();
 		cleanUp();
 	}
-	
+
 	static void setup() {
 		DisplayManager.CreateDisplay();
 		renderer = new MasterRenderer();
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
 		camera = new Camera(new Vector3f(16, 34, 16));
 		chunkManager = new ChunkManager();
-		chunkManager.createChunks(4, 4);
+		chunkManager.createChunks(2, 2);
 	}
-	
+
 	static void loop() {
-		while(!Display.isCloseRequested()) {
+		while (!Display.isCloseRequested()) {
 			camera.move();
 			for (Chunk chunk : chunkManager.getChunks()) {
 				for (Block block : chunk.getBlocksToRender()) {
@@ -44,10 +44,10 @@ public class GameLoop {
 			}
 			renderer.render(light, camera);
 			DisplayManager.UpdateDisplay();
-			System.out.println(DisplayManager.getDeltaInMilliseconds());
+			// System.out.println(DisplayManager.getDeltaInMilliseconds());
 		}
 	}
-	
+
 	static void cleanUp() {
 		renderer.cleanUp();
 		Loader.cleanUp();
