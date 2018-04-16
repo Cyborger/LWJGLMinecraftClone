@@ -38,14 +38,16 @@ public class GameLoop {
 	static void loop() {
 		while(!Display.isCloseRequested()) {
 			camera.move();
-			for (Chunk chunk : chunks) {
-				for (Entity entity : chunk.getEntities()) {
-					renderer.processEntity(entity);
+			for (int i = 0; i < chunks.size(); i ++) {
+				Chunk chunk = chunks.get(i);
+				if(chunk.checkForSurroundingBlocks(i)) {
+					for (Entity entity : chunk.getEntities()) {
+						renderer.processEntity(entity);
+					}
 				}
 			}
 			renderer.render(light, camera);
 			DisplayManager.UpdateDisplay();
-			System.out.println(DisplayManager.getDeltaInMilliseconds());
 		}
 	}
 	
