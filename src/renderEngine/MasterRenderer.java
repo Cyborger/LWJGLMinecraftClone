@@ -51,6 +51,10 @@ public class MasterRenderer {
 		shader.stop();
 		entities.clear();
 	}
+	
+	public Matrix4f getProjectionMatrix() {
+		return projectionMatrix;
+	}
 
 	public void processEntity(Entity entity) {
 		TexturedModel entityModel = entity.getModel();
