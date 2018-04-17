@@ -12,7 +12,7 @@ public class Chunk {
 
 	public int chunk_x;
 	public int chunk_z;
-	public static final int SIZE = 32;
+	public static final int SIZE = 16;
 	
 	private Block[][][] blockArray = new Block[SIZE][SIZE][SIZE];
 	private List<Block> blocksToRender = new ArrayList<Block>();
