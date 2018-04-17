@@ -1,5 +1,6 @@
 package core;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -29,9 +30,10 @@ public class GameLoop {
 		DisplayManager.CreateDisplay();
 		renderer = new MasterRenderer();
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
-		camera = new Camera(new Vector3f(16, 34, 16));
+		camera = new Camera(new Vector3f(0, 0, 0));
 		chunkManager = new ChunkManager();
 		chunkManager.createChunks(1, 1);
+		chunkManager.getChunks().get(0).removeBlock(5, 2, 2);
 	}
 
 	static void loop() {

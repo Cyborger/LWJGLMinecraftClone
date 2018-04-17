@@ -10,9 +10,10 @@ import entities.DirtBlock;
 
 public class Chunk {
 
-	private final int SIZE = 16;
-	private int chunk_x;
-	private int chunk_z;
+	public int chunk_x;
+	public int chunk_z;
+	
+	private static final int SIZE = 16;
 	private Block[][][] blockArray = new Block[SIZE][SIZE][SIZE];
 	private List<Block> blocksToRender = new ArrayList<Block>();
 
@@ -27,7 +28,9 @@ public class Chunk {
 			for (int y = 0; y < SIZE; ++y) {
 				for (int z = 0; z < SIZE; ++z) {
 					Block dirtBlock = new DirtBlock(new Vector3f(chunk_x + x * 2, y * 2, chunk_z + z * 2));
-					addBlock(dirtBlock, x, y, z);
+					if (!(x == 4 && y == 7 && z == 6)) {
+						addBlock(dirtBlock, x, y, z);
+					}
 				}
 			}
 		}
@@ -35,16 +38,26 @@ public class Chunk {
 
 	public void addBlock(Block block, int x, int y, int z) {
 		blockArray[x][y][z] = block;
-		checkBlockNeighbors(x, y, z);
-		checkBlockNeighbors(x + 1, y, z);
-		checkBlockNeighbors(x - 1, y, z);
-		checkBlockNeighbors(x, y + 1, z);
-		checkBlockNeighbors(x, y - 1, z);
-		checkBlockNeighbors(x, y, z + 1);
-		checkBlockNeighbors(x, y, z - 1);
+		updateBlockAndNeighbors(x, y, z);
+	}
+	
+	public void removeBlock(int x, int y, int z) {
+		blocksToRender.remove(blockArray[x][y][z]);
+		blockArray[x][y][z] = null;
+		updateBlockAndNeighbors(x, y, z);
 	}
 
-	public void checkBlockNeighbors(int x, int y, int z) {
+	public void updateBlockAndNeighbors(int x, int y, int z) {
+		checkNeighborFlags(x, y, z);
+		checkNeighborFlags(x + 1, y, z);
+		checkNeighborFlags(x - 1, y, z);
+		checkNeighborFlags(x, y + 1, z);
+		checkNeighborFlags(x, y - 1, z);
+		checkNeighborFlags(x, y, z + 1);
+		checkNeighborFlags(x, y, z - 1);
+	}
+	
+	public void checkNeighborFlags(int x, int y, int z) {
 		if (!spotInBlockArrayFilled(x, y, z)) return;
 		
 		Block block = blockArray[x][y][z];
