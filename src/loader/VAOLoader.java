@@ -16,9 +16,8 @@ import models.RawModel;
 public class VAOLoader {
 	private List<Integer> vaos = new ArrayList<Integer>();
 	private List<Integer> vbos = new ArrayList<Integer>();
-	
-	public RawModel loadToVAO(float[] vertices, float[] textureCoords,
-			float[] normals, int[] indices) {
+
+	public RawModel loadToVAO(float[] vertices, float[] textureCoords, float[] normals, int[] indices) {
 		int vaoID = createVAO();
 		bindIndiceBuffer(indices);
 		storeDataInAttributeList(0, 3, vertices);
@@ -27,27 +26,27 @@ public class VAOLoader {
 		unbindVAO();
 		return new RawModel(vaoID, indices.length);
 	}
-	
+
 	public void cleanUp() {
-		for(int vao:vaos) {
+		for (int vao : vaos) {
 			GL30.glDeleteVertexArrays(vao);
 		}
-		for(int vbo:vbos) {
+		for (int vbo : vbos) {
 			GL30.glDeleteVertexArrays(vbo);
 		}
 	}
-	
+
 	private int createVAO() {
 		int vaoID = GL30.glGenVertexArrays();
 		vaos.add(vaoID);
 		GL30.glBindVertexArray(vaoID);
 		return vaoID;
 	}
-	
+
 	private void unbindVAO() {
 		GL30.glBindVertexArray(0);
 	}
-	
+
 	private void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data) {
 		int vboID = GL15.glGenBuffers();
 		vbos.add(vboID);
@@ -65,14 +64,14 @@ public class VAOLoader {
 		IntBuffer buffer = storeDataInIntBuffer(indices);
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
 	}
-	
+
 	private IntBuffer storeDataInIntBuffer(int[] data) {
 		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
 		buffer.put(data);
 		buffer.flip();
 		return buffer;
 	}
-	
+
 	private FloatBuffer storeDataInFloatBuffer(float[] data) {
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
 		buffer.put(data);

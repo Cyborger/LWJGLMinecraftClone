@@ -7,8 +7,7 @@ public class ModelData {
 	private float[] normals;
 	private int[] indices;
 
-	public ModelData(float[] vertices, float[] textureCoords, float[] normals, 
-			int[] indices) {
+	public ModelData(float[] vertices, float[] textureCoords, float[] normals, int[] indices) {
 		this.vertices = vertices;
 		this.textureCoords = textureCoords;
 		this.normals = normals;

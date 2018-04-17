@@ -12,7 +12,7 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 public class OBJLoader {
-	
+
 	private static final String RES_LOC = "res/models/";
 
 	public ModelData loadOBJ(String fileName) {
@@ -35,8 +35,7 @@ public class OBJLoader {
 				if (line.startsWith("v ")) {
 					String[] currentLine = line.split(" ");
 					Vector3f vertex = new Vector3f((float) Float.valueOf(currentLine[1]),
-							(float) Float.valueOf(currentLine[2]),
-							(float) Float.valueOf(currentLine[3]));
+							(float) Float.valueOf(currentLine[2]), (float) Float.valueOf(currentLine[3]));
 					Vertex newVertex = new Vertex(vertices.size(), vertex);
 					vertices.add(newVertex);
 
@@ -48,8 +47,7 @@ public class OBJLoader {
 				} else if (line.startsWith("vn ")) {
 					String[] currentLine = line.split(" ");
 					Vector3f normal = new Vector3f((float) Float.valueOf(currentLine[1]),
-							(float) Float.valueOf(currentLine[2]),
-							(float) Float.valueOf(currentLine[3]));
+							(float) Float.valueOf(currentLine[2]), (float) Float.valueOf(currentLine[3]));
 					normals.add(normal);
 				} else if (line.startsWith("f ")) {
 					break;
@@ -89,8 +87,7 @@ public class OBJLoader {
 			currentVertex.setNormalIndex(normalIndex);
 			indices.add(index);
 		} else {
-			dealWithAlreadyProcessedVertex(currentVertex, textureIndex, normalIndex, indices,
-					vertices);
+			dealWithAlreadyProcessedVertex(currentVertex, textureIndex, normalIndex, indices, vertices);
 		}
 	}
 
@@ -102,9 +99,8 @@ public class OBJLoader {
 		return indicesArray;
 	}
 
-	private void convertDataToArrays(List<Vertex> vertices, List<Vector2f> textures,
-			List<Vector3f> normals, float[] verticesArray, float[] texturesArray,
-			float[] normalsArray) {
+	private void convertDataToArrays(List<Vertex> vertices, List<Vector2f> textures, List<Vector3f> normals,
+			float[] verticesArray, float[] texturesArray, float[] normalsArray) {
 		for (int i = 0; i < vertices.size(); i++) {
 			Vertex currentVertex = vertices.get(i);
 			Vector3f position = currentVertex.getPosition();
@@ -121,15 +117,14 @@ public class OBJLoader {
 		}
 	}
 
-	private static void dealWithAlreadyProcessedVertex(Vertex previousVertex, int newTextureIndex,
-			int newNormalIndex, List<Integer> indices, List<Vertex> vertices) {
+	private static void dealWithAlreadyProcessedVertex(Vertex previousVertex, int newTextureIndex, int newNormalIndex,
+			List<Integer> indices, List<Vertex> vertices) {
 		if (previousVertex.hasSameTextureAndNormal(newTextureIndex, newNormalIndex)) {
 			indices.add(previousVertex.getIndex());
 		} else {
 			Vertex anotherVertex = previousVertex.getDuplicateVertex();
 			if (anotherVertex != null) {
-				dealWithAlreadyProcessedVertex(anotherVertex, newTextureIndex, newNormalIndex,
-						indices, vertices);
+				dealWithAlreadyProcessedVertex(anotherVertex, newTextureIndex, newNormalIndex, indices, vertices);
 			} else {
 				Vertex duplicateVertex = new Vertex(vertices.size(), previousVertex.getPosition());
 				duplicateVertex.setTextureIndex(newTextureIndex);
@@ -141,10 +136,10 @@ public class OBJLoader {
 
 		}
 	}
-	
-	private static void removeUnusedVertices(List<Vertex> vertices){
-		for(Vertex vertex:vertices){
-			if(!vertex.isSet()){
+
+	private static void removeUnusedVertices(List<Vertex> vertices) {
+		for (Vertex vertex : vertices) {
+			if (!vertex.isSet()) {
 				vertex.setTextureIndex(0);
 				vertex.setNormalIndex(0);
 			}
