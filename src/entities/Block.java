@@ -23,10 +23,10 @@ public abstract class Block extends Entity {
 			return true;
 		}
 	}
-	
+
 	private boolean allBoolsTrue(boolean... args) {
 		for (boolean bool : args) {
-			if(bool == false) {
+			if (bool == false) {
 				return false;
 			}
 		}
