@@ -1,7 +1,5 @@
 package utilities;
 
-import java.util.List;
-
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
@@ -26,8 +24,7 @@ public class MousePicker {
 	private Camera camera;
 	private World world;
 	
-	private float mouseX = Mouse.getDX();
-	private float mouseY = Mouse.getDY();
+	
 	
 	private Vector3f currentTerrainPoint;
 	
@@ -45,20 +42,20 @@ public class MousePicker {
 	public Vector3f getTerrainPoint() {
 		return currentTerrainPoint;
 	}
-	
 	public void update() {
 		viewMatrix = MatrixMath.createViewMatrix(camera);
 		currentRay = calculateMouseRay();
-		if (intersectionInRange(0, RAY_RANGE, currentRay)) {
-			currentTerrainPoint = binarySearch(0, 0, RAY_RANGE, currentRay);
-		} else {
-			currentTerrainPoint = null;
-		}
+		//System.out.println(CheckForHit(currentRay));
+		CheckForHit(currentRay);
+		
+		
 	}
 
 	private Vector3f calculateMouseRay() {
-		float mouseX = Mouse.getX();
-		float mouseY = Mouse.getY();
+		//float mouseX = Display.getWidth()/2f;
+		//float mouseY = Display.getHeight()/2f;
+		float mouseX = Mouse.getDX();
+		float mouseY = Mouse.getDY();
 		Vector2f normalizedCoords = getNormalisedDeviceCoordinates(mouseX, mouseY);
 		Vector4f clipCoords = new Vector4f(normalizedCoords.x, normalizedCoords.y, -1.0f, 1.0f);
 		Vector4f eyeCoords = toEyeCoords(clipCoords);
@@ -81,7 +78,7 @@ public class MousePicker {
 	}
 
 	private Vector2f getNormalisedDeviceCoordinates(float mouseX, float mouseY) {
-		float x = (2.0f * mouseX) / Display.getWidth() - 1f;
+		float x = (2.0f * mouseX) / Display.getWidth() - 1;
 		float y = (2.0f * mouseY) / Display.getHeight() - 1f;
 		return new Vector2f(x, y);
 	}
@@ -93,48 +90,10 @@ public class MousePicker {
 		return Vector3f.add(start, scaledRay, null);
 	}
 	
-	private Vector3f binarySearch(int count, float start, float finish, Vector3f ray) {
-		float half = start + ((finish - start) / 2f);
-		if (count >= RECURSION_COUNT) {
-			Vector3f endPoint = getPointOnRay(ray, half);
-			if (this.world != null) {
-				return endPoint;
-			} else {
-				return null;
-			}
-		}
-		if (intersectionInRange(start, half, ray)) {
-			return binarySearch(count + 1, start, half, ray);
-		} else {
-			return binarySearch(count + 1, half, finish, ray);
-		}
-	}
-
-	private boolean intersectionInRange(float start, float finish, Vector3f ray) {
-		Vector3f startPoint = getPointOnRay(ray, start);
-		Vector3f endPoint = getPointOnRay(ray, finish);
-		if (!isUnderGround(startPoint) && isUnderGround(endPoint)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private boolean isUnderGround(Vector3f testPoint) {
-		float height = 0;
-		
-				
-		if(world != null) {
-			height = world.getChunks().get(0).getHeightAtXZ(testPoint);
-		}
-		
-		if (testPoint.y < height) {
-			return true;
-		} else {
-			return false;
-		}
-		
-		
-	}
+	
+	
+	
+	
+	
 
 }

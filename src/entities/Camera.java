@@ -14,6 +14,7 @@ public class Camera {
 	private float yaw;
 	private float roll;
 	private float speed = 0.2f;
+	@SuppressWarnings("unused")
 	private Frustum frustum = new Frustum();
 
 	public Camera(Vector3f startPosition) {
