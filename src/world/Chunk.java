@@ -1,7 +1,6 @@
 package world;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -10,112 +9,110 @@ import entities.DirtBlock;
 
 public class Chunk {
 
-	public int chunk_x;
-	public int chunk_y;
-	public int chunk_z;
 	public static final int SIZE = 16;
+	public int x;
+	public int y;
+	public int z;
+	
+	public boolean hasXPNeighbor;
+	public boolean hasXMNeighbor;
+	public boolean hasYPNeighbor;
+	public boolean hasYMNeighbor;
+	public boolean hasZPNeighbor;
+	public boolean hasZMNeighbor;
 	
 	private Block[][][] blockArray = new Block[SIZE][SIZE][SIZE];
-	private List<Block> blocksToRender = new ArrayList<Block>();
-
+	private ArrayList<Block> blocksToRender = new ArrayList<Block>();
+	
 	public Chunk(int x, int y, int z) {
-		this.chunk_x = x;
-		this.chunk_y = y;
-		this.chunk_z = z;
-		generateBlocks();
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		fill();
 	}
-
-	private void generateBlocks() {
+	
+	private void fill() {
 		for (int x = 0; x < SIZE; ++x) {
 			for (int y = 0; y < SIZE; ++y) {
 				for (int z = 0; z < SIZE; ++z) {
-					Block dirtBlock = new DirtBlock(new Vector3f(chunk_x + x, chunk_y + y, chunk_z + z));
-					if (y < 8) {
-						addBlock(dirtBlock, x, y, z);
-					}
+					Vector3f blockPosition = new Vector3f(x + this.x, y + this.y, z + this.z);
+					addBlock(new DirtBlock(blockPosition));
 				}
 			}
 		}
 	}
-
-	public List<Block> getBlocksToRender() {
+	
+	public void addBlock(Block block) {
+		int x_index = (int) block.getPosition().x - this.x;
+		int y_index = (int) block.getPosition().y - this.y;
+		int z_index = (int) block.getPosition().z - this.z;
+		blockArray[x_index][y_index][z_index] = block;
+		updateBlockNeighbors(x_index, y_index, z_index);
+	}
+	
+	public void removeBlock(int x, int y, int z) {
+		blocksToRender.remove(getBlock(x, y, z));
+		blockArray[x][y][z] = null;
+		updateBlockNeighbors(x, y, z);
+	}
+	
+	public Block getBlock(int x, int y, int z) {
+		try {
+			return blockArray[x][y][z];
+		} catch(ArrayIndexOutOfBoundsException e) {
+			return null;
+		}
+	}
+	
+	public boolean positionWithinChunk(Vector3f position) {
+		if (position.x >= this.x && position.x < this.x + SIZE &&
+				position.y >= this.y && position.y < this.y + SIZE &&
+				position.z >= this.z && position.z < this.z + SIZE) {
+			return true;
+		}
+		return false;
+	}
+	
+	public ArrayList<Block> getBlocksToRender() {
 		return blocksToRender;
 	}
 	
-	public float getHeightAtXZ(Vector3f testPoint) {
-			
-		return -1;
+	private void updateBlockNeighbors(int x, int y, int z) {
+		updateBlockFlags(x, y, z);
+		updateBlockFlags(x + 1, y, z);
+		updateBlockFlags(x - 1, y, z);
+		updateBlockFlags(x, y + 1, z);
+		updateBlockFlags(x, y - 1, z);
+		updateBlockFlags(x, y, z + 1);
+		updateBlockFlags(x, y, z - 1);
 	}
 	
-	public void addBlock(Block block, int x, int y, int z) {
-		blockArray[x][y][z] = block;
-		updateBlockAndNeighbors(x, y, z);
-	}
-
-	public void removeBlock(int x, int y, int z) {
-		blocksToRender.remove(blockArray[x][y][z]);
-		blockArray[x][y][z] = null;
-		updateBlockAndNeighbors(x, y, z);
-	}
-
-	public void updateBlockAndNeighbors(int x, int y, int z) {
-		updateNeighborFlags(x, y, z);
-		updateNeighborFlags(x + 1, y, z);
-		updateNeighborFlags(x - 1, y, z);
-		updateNeighborFlags(x, y + 1, z);
-		updateNeighborFlags(x, y - 1, z);
-		updateNeighborFlags(x, y, z + 1);
-		updateNeighborFlags(x, y, z - 1);
-	}
-
-	public void updateNeighborFlags(int x, int y, int z) {
-		if (blockLocationOutOfBounds(x, y, z) || !spotInBlockArrayFilled(x, y, z)) {
-			return;
+	private void updateBlockFlags(int x, int y, int z) {
+		Block block = getBlock(x, y, z);
+		if (block != null) {
+			block.hasXPNeighbor = (getBlock(x + 1, y, z) != null) ? true : false;
+			block.hasXMNeighbor = (getBlock(x - 1, y, z)) != null ? true : false;
+			block.hasYPNeighbor = (getBlock(x, y + 1, z)) != null ? true : false;
+			block.hasYMNeighbor = (getBlock(x, y - 1, z)) != null ? true : false;
+			block.hasZPNeighbor = (getBlock(x, y, z + 1)) != null ? true : false;
+			block.hasZMNeighbor = (getBlock(x, y, z - 1)) != null ? true : false;
+			determineIfBlockShouldBeRendered(block);
 		}
-
-		Block block = blockArray[x][y][z];
-		block.hasXPNeighbor = (spotInBlockArrayFilled(x + 1, y, z)) ? true : false;
-		block.hasXMNeighbor = (spotInBlockArrayFilled(x - 1, y, z)) ? true : false;
-		block.hasYPNeighbor = (spotInBlockArrayFilled(x, y + 1, z)) ? true : false;
-		block.hasYMNeighbor = (spotInBlockArrayFilled(x, y - 1, z)) ? true : false;
-		block.hasZPNeighbor = (spotInBlockArrayFilled(x, y, z + 1)) ? true : false;
-		block.hasZMNeighbor = (spotInBlockArrayFilled(x, y, z - 1)) ? true : false;
-
+	}
+	
+	private void determineIfBlockShouldBeRendered(Block block) {
 		if (block.shouldRender() && !blocksToRender.contains(block)) {
 			blocksToRender.add(block);
 		} else if (!block.shouldRender() && blocksToRender.contains(block)) {
 			blocksToRender.remove(block);
 		}
 	}
-
-	private boolean spotInBlockArrayFilled(int x, int y, int z) {
-		if (blockLocationOutOfBounds(x, y, z)) {
-			return false;
-		}
-		if (blockArray[x][y][z] != null) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-		
-	private boolean blockLocationOutOfBounds(int x, int y, int z) {
-		if (x < 0 || x >= SIZE || y < 0 || y >= SIZE || z < 0 || z >= SIZE) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean positionWithinChunk(int world_x, int world_y, int world_z) {
-		if (world_x > chunk_x && world_x < chunk_x + SIZE &&
-				world_y > chunk_y && world_y < chunk_y + SIZE &&
-				world_z > chunk_z && world_z < chunk_z + SIZE) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 	
-	
+	private boolean onBorder(int x, int y, int z) {
+		if (x == -1 || x == SIZE || y == -1 || y == SIZE || z == -1 || z == SIZE) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

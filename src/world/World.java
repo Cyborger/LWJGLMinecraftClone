@@ -8,22 +8,24 @@ import entities.Block;
 public class World {
 	private List<Chunk> chunks = new ArrayList<Chunk>();
 
-	public World(int chunks_wide, int chunks_deep) {
-		createChunks(chunks_wide, chunks_deep);
+	public World(int chunks_wide, int chunks_high, int chunks_deep) {
+		createChunks(chunks_wide, chunks_high, chunks_deep);
 	}
 	
-	public void placeBlock(Block block, int x, int y, int z) {
+	public void placeBlock(Block block) {
 		for (Chunk chunk : chunks) {
-			if (chunk.positionWithinChunk(x, y, z)) {
-				chunk.addBlock(block, x - chunk.chunk_x, y - chunk.chunk_y, z - chunk.chunk_z);
+			if (chunk.positionWithinChunk(block.getPosition())) {
+				chunk.addBlock(block);
 			}
 		}
 	}
 	
-	public void createChunks(int width, int depth) {
+	public void createChunks(int width, int height, int depth) {
 		for (int x = 0; x < width; ++x) {
-			for (int z = 0; z < depth; ++z) {
-				chunks.add(new Chunk(x * Chunk.SIZE, 0, z * Chunk.SIZE));
+			for (int y = 0; y < height; ++y) {
+				for (int z = 0; z < depth; ++z) {
+					chunks.add(new Chunk(x * Chunk.SIZE, y * Chunk.SIZE, z * Chunk.SIZE));
+				}
 			}
 		}
 	}

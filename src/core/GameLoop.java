@@ -1,9 +1,5 @@
 package core;
 
-import java.util.Random;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -38,30 +34,32 @@ public class GameLoop {
 		
 		camera = new Camera(new Vector3f(0, 0, 0));
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
-		world = new World(1, 1);
-		world.placeBlock(new DirtBlock(new Vector3f(9, 8, 9)), 9, 8, 9);
+		world = new World(2, 2, 2);
+		world.placeBlock(new DirtBlock(new Vector3f(15, 8, 9)));
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix(), world);
 	}
 
 	static void loop() {
 		while (!Display.isCloseRequested()) {
+			// Update
 			camera.move();
-			//mousePicker.update();			
-			//System.out.println(mousePicker.getTerrainPoint());
-			for (Chunk chunk : world.getChunks()) {
-				for (Block block : chunk.getBlocksToRender()) {
-					renderer.processEntity(block);
-				}
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_C)) {
-				world.getChunks().get(0).removeBlock((int)mousePicker.getTerrainPoint().x, (int)mousePicker.getTerrainPoint().y, (int)mousePicker.getTerrainPoint().z);
-			}
+			mousePicker.update();
+			
+			// Render
+			processBlockEntities();
 			renderer.render(light, camera);
 			DisplayManager.UpdateDisplay();
-			//System.out.println(DisplayManager.getDeltaInMilliseconds());
 		}
 	}
 
+	static void processBlockEntities() {
+		for (Chunk chunk : world.getChunks()) {
+			for (Block block : chunk.getBlocksToRender()) {
+				renderer.processEntity(block);
+			}
+		}
+	}
+	
 	static void cleanUp() {
 		renderer.cleanUp();
 		Loader.cleanUp();
