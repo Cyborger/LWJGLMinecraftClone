@@ -3,6 +3,8 @@ package world;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import entities.Block;
 
 public class World {
@@ -16,6 +18,14 @@ public class World {
 		for (Chunk chunk : chunks) {
 			if (chunk.positionWithinChunk(block.getPosition())) {
 				chunk.addBlock(block);
+			}
+		}
+	}
+	
+	public void removeBlock(int x, int y, int z) {
+		for (Chunk chunk : chunks) {
+			if (chunk.positionWithinChunk(new Vector3f(x, y, z))) {
+				chunk.removeBlock(x - chunk.x, y - chunk.y, z - chunk.z);
 			}
 		}
 	}

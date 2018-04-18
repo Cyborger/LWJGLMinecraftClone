@@ -34,13 +34,8 @@ public class GameLoop {
 		
 		camera = new Camera(new Vector3f(0, 0, 0));
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
-		world = new World(2, 1, 1);
-		world.placeBlock(new DirtBlock(new Vector3f(3, 1, 1)));
-		world.placeBlock(new DirtBlock(new Vector3f(4, 1, 1)));
-		world.placeBlock(new DirtBlock(new Vector3f(5, 1, 1)));
-		world.placeBlock(new DirtBlock(new Vector3f(6, 1, 1)));
-		world.placeBlock(new DirtBlock(new Vector3f(5, 1, 2)));
-		world.placeBlock(new DirtBlock(new Vector3f(5, 1, 0)));
+		world = new World(2, 2, 2);
+		world.removeBlock(22, 7, 19);
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix(), world);
 	}
 

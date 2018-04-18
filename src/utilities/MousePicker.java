@@ -49,10 +49,17 @@ public class MousePicker {
 	private Vector3f calculateMouseRay() {
 		float mouseX = Display.getWidth()/2f;
 		float mouseY = Display.getHeight()/2f;
-		Vector4f clipCoords = new Vector4f(mouseX, mouseY, -1.0f, 1.0f);
+		Vector2f NDC = getNormalisedDeviceCoordinates(mouseX, mouseY);
+		Vector4f clipCoords = new Vector4f(NDC.x, NDC.y, -1.0f, 1.0f);
 		Vector4f eyeCoords = toEyeCoords(clipCoords);
 		Vector3f worldRay = toWorldCoords(eyeCoords);
 		return worldRay;
+	}
+	
+	private Vector2f getNormalisedDeviceCoordinates(float mouseX, float mouseY) {
+		float x = (2.0f * mouseX) / Display.getWidth() - 1;
+		float y = (2.0f * mouseY) / Display.getHeight() - 1f;
+		return new Vector2f(x, y);
 	}
 
 	private Vector3f toWorldCoords(Vector4f eyeCoords) {
