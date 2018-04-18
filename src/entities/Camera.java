@@ -4,6 +4,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
+import utilities.Frustum;
+
+
 public class Camera {
 
 	private Vector3f position;
@@ -11,13 +14,14 @@ public class Camera {
 	private float yaw;
 	private float roll;
 	private float speed = 0.2f;
+	private Frustum frustum = new Frustum();
 
 	public Camera(Vector3f startPosition) {
 		this.position = startPosition;
 	}
 
 	public void move() {
-
+		//frustum.calculateFrustum();
 		float arg_yaw = Mouse.getDX();
 		yaw += arg_yaw / 10;
 		float arg_roll = Mouse.getDY();

@@ -38,6 +38,20 @@ public class Chunk {
 		return blocksToRender;
 	}
 	
+	public float getHeightAtXZ(Vector3f testPoint) {
+		for(Block[][] block : blockArray) {
+			for(Block[] block1 : block) {
+				for(Block block2 : block1) {
+					if(block2.getPosition().x >= testPoint.x + 0.1 && block2.getPosition().x <= testPoint.x - 0.1 
+							&& block2.getPosition().z >= testPoint.z + 1 && block2.getPosition().z <= testPoint.z - 1) {
+						return block2.getPosition().y;
+					}
+				}
+			}
+		}		
+		return -1;
+	}
+	
 	public void addBlock(Block block, int x, int y, int z) {
 		blockArray[x][y][z] = block;
 		updateBlockAndNeighbors(x, y, z);
