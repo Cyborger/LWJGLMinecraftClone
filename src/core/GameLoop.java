@@ -1,9 +1,6 @@
 package core;
 
-import java.util.Random;
-
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -46,7 +43,7 @@ public class GameLoop {
 	static void loop() {
 		while (!Display.isCloseRequested()) {
 			camera.move();
-			//mousePicker.update();			
+			mousePicker.update();			
 			//System.out.println(mousePicker.getTerrainPoint());
 			for (Chunk chunk : world.getChunks()) {
 				for (Block block : chunk.getBlocksToRender()) {
@@ -54,6 +51,7 @@ public class GameLoop {
 				}
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_C)) {
+				System.out.println(mousePicker.getTerrainPoint());
 				world.getChunks().get(0).removeBlock((int)mousePicker.getTerrainPoint().x, (int)mousePicker.getTerrainPoint().y, (int)mousePicker.getTerrainPoint().z);
 			}
 			renderer.render(light, camera);

@@ -42,8 +42,8 @@ public class Chunk {
 		return blocksToRender;
 	}
 	
-	public float getHeightAtXZ(Vector3f testPoint) {
-			
+	public float getHeightOfBlock(Vector3f testPoint) {
+		
 		return -1;
 	}
 	
