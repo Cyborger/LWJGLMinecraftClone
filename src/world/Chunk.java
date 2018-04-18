@@ -28,7 +28,7 @@ public class Chunk {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		fill();
+		// fill();
 	}
 	
 	private void fill() {

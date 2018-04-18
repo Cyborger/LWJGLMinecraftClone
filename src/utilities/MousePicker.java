@@ -24,14 +24,11 @@ public class MousePicker {
 	private Camera camera;
 	private World world;
 	
-	
-	
 	private Vector3f currentTerrainPoint;
 	
-	public MousePicker(Camera cam, Matrix4f projection, World world) {
-		this.camera = cam;
+	public MousePicker(Camera camera, Matrix4f projection, World world) {
+		this.camera = camera;
 		this.projectionMatrix = projection;
-		this.viewMatrix = MatrixMath.createViewMatrix(camera);
 		this.world = world;
 	}
 	
@@ -42,22 +39,17 @@ public class MousePicker {
 	public Vector3f getTerrainPoint() {
 		return currentTerrainPoint;
 	}
+	
 	public void update() {
 		viewMatrix = MatrixMath.createViewMatrix(camera);
 		currentRay = calculateMouseRay();
-		//System.out.println(CheckForHit(currentRay));
-		CheckForHit(currentRay);
-		
-		
+		System.out.println(currentRay);
 	}
 
 	private Vector3f calculateMouseRay() {
-		//float mouseX = Display.getWidth()/2f;
-		//float mouseY = Display.getHeight()/2f;
-		float mouseX = Mouse.getDX();
-		float mouseY = Mouse.getDY();
-		Vector2f normalizedCoords = getNormalisedDeviceCoordinates(mouseX, mouseY);
-		Vector4f clipCoords = new Vector4f(normalizedCoords.x, normalizedCoords.y, -1.0f, 1.0f);
+		float mouseX = Display.getWidth()/2f;
+		float mouseY = Display.getHeight()/2f;
+		Vector4f clipCoords = new Vector4f(mouseX, mouseY, -1.0f, 1.0f);
 		Vector4f eyeCoords = toEyeCoords(clipCoords);
 		Vector3f worldRay = toWorldCoords(eyeCoords);
 		return worldRay;
@@ -76,12 +68,6 @@ public class MousePicker {
 		Vector4f eyeCoords = Matrix4f.transform(invertedProjection, clipCoords, null);
 		return new Vector4f(eyeCoords.x, eyeCoords.y, -1f, 0f);
 	}
-
-	private Vector2f getNormalisedDeviceCoordinates(float mouseX, float mouseY) {
-		float x = (2.0f * mouseX) / Display.getWidth() - 1;
-		float y = (2.0f * mouseY) / Display.getHeight() - 1f;
-		return new Vector2f(x, y);
-	}
 	
 	private Vector3f getPointOnRay(Vector3f ray, float distance) {
 		Vector3f camPos = camera.getPosition();
@@ -89,11 +75,4 @@ public class MousePicker {
 		Vector3f scaledRay = new Vector3f(ray.x * distance, ray.y * distance, ray.z * distance);
 		return Vector3f.add(start, scaledRay, null);
 	}
-	
-	
-	
-	
-	
-	
-
 }
