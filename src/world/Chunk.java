@@ -11,14 +11,16 @@ import entities.DirtBlock;
 public class Chunk {
 
 	public int chunk_x;
+	public int chunk_y;
 	public int chunk_z;
 	public static final int SIZE = 16;
 	
 	private Block[][][] blockArray = new Block[SIZE][SIZE][SIZE];
 	private List<Block> blocksToRender = new ArrayList<Block>();
 
-	public Chunk(int x, int z) {
+	public Chunk(int x, int y, int z) {
 		this.chunk_x = x;
+		this.chunk_y = y;
 		this.chunk_z = z;
 		generateBlocks();
 	}
@@ -27,8 +29,10 @@ public class Chunk {
 		for (int x = 0; x < SIZE; ++x) {
 			for (int y = 0; y < SIZE; ++y) {
 				for (int z = 0; z < SIZE; ++z) {
-					Block dirtBlock = new DirtBlock(new Vector3f(chunk_x + x, y, chunk_z + z));
-					addBlock(dirtBlock, x, y, z);
+					Block dirtBlock = new DirtBlock(new Vector3f(chunk_x + x, chunk_y + y, chunk_z + z));
+					if (y < 8) {
+						addBlock(dirtBlock, x, y, z);
+					}
 				}
 			}
 		}
@@ -97,4 +101,16 @@ public class Chunk {
 			return false;
 		}
 	}
+
+	public boolean positionWithinChunk(int world_x, int world_y, int world_z) {
+		if (world_x > chunk_x && world_x < chunk_x + SIZE &&
+				world_y > chunk_y && world_y < chunk_y + SIZE &&
+				world_z > chunk_z && world_z < chunk_z + SIZE) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
 }

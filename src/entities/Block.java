@@ -5,6 +5,7 @@ import org.lwjgl.util.vector.Vector3f;
 import models.TexturedModel;
 
 public abstract class Block extends Entity {
+	
 	public boolean hasXPNeighbor;
 	public boolean hasXMNeighbor;
 	public boolean hasYPNeighbor;

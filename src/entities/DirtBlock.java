@@ -9,7 +9,7 @@ import models.TexturedModel;
 
 public class DirtBlock extends Block {
 
-	static Texture dirtTexture = new Texture(Loader.loadTexture("leaves"));
+	static Texture dirtTexture = new Texture(Loader.loadTexture("crate"));
 	static RawModel cubeModel = Loader.loadOBJ("block");
 	static TexturedModel dirtModel = new TexturedModel(cubeModel, dirtTexture);
 
