@@ -14,6 +14,7 @@ import entities.Entity;
 import entities.Light;
 import models.TexturedModel;
 import shaders.StaticShader;
+import utilities.MatrixMath;
 
 public class MasterRenderer {
 	private static final float FOV = 70;
@@ -54,6 +55,10 @@ public class MasterRenderer {
 	
 	public Matrix4f getProjectionMatrix() {
 		return projectionMatrix;
+	}
+	
+	public Matrix4f getViewMatrix(Camera camera) {
+		return MatrixMath.createViewMatrix(camera);
 	}
 
 	public void processEntity(Entity entity) {

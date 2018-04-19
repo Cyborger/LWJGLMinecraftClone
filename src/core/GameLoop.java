@@ -10,6 +10,7 @@ import entities.Light;
 import loader.Loader;
 import renderEngine.DisplayManager;
 import renderEngine.MasterRenderer;
+import utilities.Frustum;
 import utilities.MousePicker;
 import world.Chunk;
 import world.World;
@@ -21,6 +22,7 @@ public class GameLoop {
 	static Camera camera;
 	static World world;
 	static MousePicker mousePicker;
+	static Frustum frustum;
 	
 	public static void main(String[] args) {
 		setup();
@@ -34,8 +36,9 @@ public class GameLoop {
 		
 		camera = new Camera(new Vector3f(0, 0, 0));
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
-		world = new World(2, 2, 2);
+		world = new World(6, 6, 6);
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix(), world);
+		frustum = new Frustum();
 	}
 
 	static void loop() {
@@ -49,20 +52,27 @@ public class GameLoop {
 					++counter;
 				}
 			}
+			
 			// mousePicker.update();
 			
 			// Render
 			processBlockEntities();
+			Frustum.getFrustum(camera, renderer);
 			renderer.render(light, camera);
+			
+			
 			DisplayManager.UpdateDisplay();
 			System.out.println(DisplayManager.getDeltaInMilliseconds());
 		}
+		
 	}
 
 	static void processBlockEntities() {
 		for (Chunk chunk : world.getChunks()) {
-			for (Block block : chunk.getBlocksToRender()) {
-				renderer.processEntity(block);
+			if(Frustum.getFrustum(camera, renderer).cubeInFrustum(chunk.x, chunk.y, chunk.z, chunk.x + Chunk.SIZE, chunk.y + Chunk.SIZE, chunk.z + Chunk.SIZE)) {
+				for (Block block : chunk.getBlocksToRender()) {
+					renderer.processEntity(block);
+				}
 			}
 		}
 	}

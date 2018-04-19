@@ -14,15 +14,14 @@ public class Camera {
 	private float yaw;
 	private float roll;
 	private float speed = 0.2f;
-	@SuppressWarnings("unused")
-	private Frustum frustum = new Frustum();
+
 
 	public Camera(Vector3f startPosition) {
 		this.position = startPosition;
 	}
 
 	public void move() {
-		//frustum.calculateFrustum();
+	
 		float arg_yaw = Mouse.getDX();
 		yaw += arg_yaw / 10;
 		float arg_roll = Mouse.getDY();
