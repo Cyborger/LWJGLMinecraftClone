@@ -63,6 +63,10 @@ public class World {
 				for (int z = 0; z < chunkArray[0][0].length; ++z) {
 					updateChunkTopSide(getChunk(x, y, z), getChunk(x, y + 1, z));
 					updateChunkBottomSide(getChunk(x, y, z), getChunk(x, y - 1, z));
+					updateChunkRightSide(getChunk(x, y, z), getChunk(x + 1, y, z));
+					updateChunkLeftSide(getChunk(x, y, z), getChunk(x - 1, y, z));
+					updateChunkFrontSide(getChunk(x, y, z), getChunk(x, y, z + 1));
+					updateChunkBackSide(getChunk(x, y, z), getChunk(x, y, z - 1));
 				}
 			}
 		}
@@ -102,6 +106,86 @@ public class World {
 					blockToUpdate.hasYMNeighbor = false;
 				} else {
 					blockToUpdate.hasYMNeighbor = true;
+				}
+				firstChunk.determineIfBlockShouldBeRendered(blockToUpdate);
+			}
+		}
+	}
+	
+	private void updateChunkRightSide(Chunk firstChunk, Chunk secondChunk) {
+		if (secondChunk == null) {
+			return;
+		}
+		for (int y = 0; y < Chunk.SIZE; ++y) {
+			for (int z = 0; z < Chunk.SIZE; ++z) {
+				Block blockToUpdate = firstChunk.getBlock(Chunk.SIZE - 1, y, z);
+				if (blockToUpdate == null) {
+					continue;
+				}
+				if (secondChunk.getBlock(0, y, z) == null) {
+					blockToUpdate.hasXPNeighbor = false;
+				} else {
+					blockToUpdate.hasXPNeighbor = true;
+				}
+				firstChunk.determineIfBlockShouldBeRendered(blockToUpdate);
+			}
+		}
+	}
+	
+	private void updateChunkLeftSide(Chunk firstChunk, Chunk secondChunk) {
+		if (secondChunk == null) {
+			return;
+		}
+		for (int y = 0; y < Chunk.SIZE; ++y) {
+			for (int z = 0; z < Chunk.SIZE; ++z) {
+				Block blockToUpdate = firstChunk.getBlock(0, y, z);
+				if (blockToUpdate == null) {
+					continue;
+				}
+				if (secondChunk.getBlock(Chunk.SIZE - 1, y, z) == null) {
+					blockToUpdate.hasXMNeighbor = false;
+				} else {
+					blockToUpdate.hasXMNeighbor = true;
+				}
+				firstChunk.determineIfBlockShouldBeRendered(blockToUpdate);
+			}
+		}
+	}
+	
+	private void updateChunkFrontSide(Chunk firstChunk, Chunk secondChunk) {
+		if (secondChunk == null) {
+			return;
+		}
+		for (int x = 0; x < Chunk.SIZE; ++x) {
+			for (int y = 0; y < Chunk.SIZE; ++y) {
+				Block blockToUpdate = firstChunk.getBlock(x, y, Chunk.SIZE - 1);
+				if (blockToUpdate == null) {
+					continue;
+				}
+				if (secondChunk.getBlock(x, y, 0) == null) {
+					blockToUpdate.hasZPNeighbor = false;
+				} else {
+					blockToUpdate.hasZPNeighbor = true;
+				}
+				firstChunk.determineIfBlockShouldBeRendered(blockToUpdate);
+			}
+		}
+	}
+	
+	private void updateChunkBackSide(Chunk firstChunk, Chunk secondChunk) {
+		if (secondChunk == null) {
+			return;
+		}
+		for (int x = 0; x < Chunk.SIZE; ++x) {
+			for (int y = 0; y < Chunk.SIZE; ++y) {
+				Block blockToUpdate = firstChunk.getBlock(x, y, 0);
+				if (blockToUpdate == null) {
+					continue;
+				}
+				if (secondChunk.getBlock(x, y, Chunk.SIZE - 1) == null) {
+					blockToUpdate.hasZMNeighbor = false;
+				} else {
+					blockToUpdate.hasZMNeighbor = true;
 				}
 				firstChunk.determineIfBlockShouldBeRendered(blockToUpdate);
 			}
