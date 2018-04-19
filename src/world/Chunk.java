@@ -14,13 +14,6 @@ public class Chunk {
 	public int y;
 	public int z;
 	
-	public boolean hasXPNeighbor;
-	public boolean hasXMNeighbor;
-	public boolean hasYPNeighbor;
-	public boolean hasYMNeighbor;
-	public boolean hasZPNeighbor;
-	public boolean hasZMNeighbor;
-	
 	private Block[][][] blockArray = new Block[SIZE][SIZE][SIZE];
 	private ArrayList<Block> blocksToRender = new ArrayList<Block>();
 	
@@ -90,17 +83,23 @@ public class Chunk {
 	private void updateBlockFlags(int x, int y, int z) {
 		Block block = getBlock(x, y, z);
 		if (block != null) {
-			block.hasXPNeighbor = (getBlock(x + 1, y, z) != null) ? true : false;
-			block.hasXMNeighbor = (getBlock(x - 1, y, z)) != null ? true : false;
-			block.hasYPNeighbor = (getBlock(x, y + 1, z)) != null ? true : false;
-			block.hasYMNeighbor = (getBlock(x, y - 1, z)) != null ? true : false;
-			block.hasZPNeighbor = (getBlock(x, y, z + 1)) != null ? true : false;
-			block.hasZMNeighbor = (getBlock(x, y, z - 1)) != null ? true : false;
+			if (!outsideChunk(x + 1))
+				block.hasXPNeighbor = (getBlock(x + 1, y, z) != null) ? true : false;
+			if (!outsideChunk(x - 1))
+				block.hasXMNeighbor = (getBlock(x - 1, y, z) != null) ? true : false;
+			if (!outsideChunk(y + 1))
+				block.hasYPNeighbor = (getBlock(x, y + 1, z) != null) ? true : false;
+			if (!outsideChunk(y - 1))
+				block.hasYMNeighbor = (getBlock(x, y - 1, z) != null) ? true : false;
+			if (!outsideChunk(z + 1))
+				block.hasZPNeighbor = (getBlock(x, y, z + 1) != null) ? true : false;
+			if (!outsideChunk(z - 1))
+				block.hasZMNeighbor = (getBlock(x, y, z - 1) != null) ? true : false;
 			determineIfBlockShouldBeRendered(block);
 		}
 	}
 	
-	private void determineIfBlockShouldBeRendered(Block block) {
+	public void determineIfBlockShouldBeRendered(Block block) {
 		if (block.shouldRender() && !blocksToRender.contains(block)) {
 			blocksToRender.add(block);
 		} else if (!block.shouldRender() && blocksToRender.contains(block)) {
@@ -108,11 +107,10 @@ public class Chunk {
 		}
 	}
 	
-	private boolean onBorder(int x, int y, int z) {
-		if (x == -1 || x == SIZE || y == -1 || y == SIZE || z == -1 || z == SIZE) {
+	private boolean outsideChunk(int value) {
+		if (value == -1 || value == 16) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 }
