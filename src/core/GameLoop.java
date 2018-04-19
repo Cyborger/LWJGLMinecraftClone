@@ -1,5 +1,6 @@
 package core;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -38,9 +39,16 @@ public class GameLoop {
 	}
 
 	static void loop() {
+		int counter = 0;
 		while (!Display.isCloseRequested()) {
 			// Update
 			camera.move();
+			while (Keyboard.next()) {
+				if (Keyboard.getEventKey() == Keyboard.KEY_G) {
+					world.removeBlock(8, 8, counter);
+					++counter;
+				}
+			}
 			// mousePicker.update();
 			
 			// Render

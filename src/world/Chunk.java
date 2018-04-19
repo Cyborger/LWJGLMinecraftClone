@@ -113,4 +113,94 @@ public class Chunk {
 		}
 		return false;
 	}
+	
+	public void updateTopAndBottomSides(Chunk aboveChunk, Chunk belowChunk) {
+		for (int x = 0; x < Chunk.SIZE; ++x) {
+			for (int z = 0; z < Chunk.SIZE; ++z) {
+				if (aboveChunk != null) {
+					Block blockToUpdate = getBlock(x, Chunk.SIZE - 1, z);
+					if (blockToUpdate != null) {
+						if (aboveChunk.getBlock(x, 0, z) == null) {
+							blockToUpdate.hasYPNeighbor = false;
+						} else {
+							blockToUpdate.hasYPNeighbor = true;
+						}
+						determineIfBlockShouldBeRendered(blockToUpdate);
+					}
+				}
+				if (belowChunk != null) {
+					Block blockToUpdate = getBlock(x, 0, z);
+					if (blockToUpdate != null) {
+						if (belowChunk.getBlock(x, Chunk.SIZE - 1, z) == null) {
+							blockToUpdate.hasYMNeighbor = false;
+						} else {
+							blockToUpdate.hasYMNeighbor = true;
+						}
+						determineIfBlockShouldBeRendered(blockToUpdate);
+					}
+				}
+				
+			}
+		}
+	}
+	
+	public void updateRightAndLeftSides(Chunk rightChunk, Chunk leftChunk) {
+		for (int y = 0; y < Chunk.SIZE; ++y) {
+			for (int z = 0; z < Chunk.SIZE; ++z) {
+				if (rightChunk != null) {
+					Block blockToUpdate = getBlock(Chunk.SIZE - 1, y, z);
+					if (blockToUpdate != null) {
+						if (rightChunk.getBlock(0, y, z) == null) {
+							blockToUpdate.hasXPNeighbor = false;
+						} else {
+							blockToUpdate.hasXPNeighbor = true;
+						}
+						determineIfBlockShouldBeRendered(blockToUpdate);
+					}
+				}
+				
+				if (leftChunk != null) {
+					Block blockToUpdate = getBlock(0, y, z);
+					if (blockToUpdate != null) {
+						if (leftChunk.getBlock(Chunk.SIZE - 1, y, z) == null) {
+							blockToUpdate.hasXMNeighbor = false;
+						} else {
+							blockToUpdate.hasXMNeighbor = true;
+						}
+						determineIfBlockShouldBeRendered(blockToUpdate);
+					}
+				}
+			}
+		}
+	}
+	
+	public void updateFrontAndBackSides(Chunk frontChunk, Chunk backChunk) {
+		for (int x = 0; x < Chunk.SIZE; ++x) {
+			for (int y = 0; y < Chunk.SIZE; ++y) {
+				if (frontChunk != null) {
+					Block blockToUpdate = getBlock(x, y, Chunk.SIZE - 1);
+					if (blockToUpdate != null) {
+						if (frontChunk.getBlock(x, y, 0) == null) {
+							blockToUpdate.hasZPNeighbor = false;
+						} else {
+							blockToUpdate.hasZPNeighbor = true;
+						}
+						determineIfBlockShouldBeRendered(blockToUpdate);
+					}
+				}
+				
+				if (backChunk != null) {
+					Block blockToUpdate = getBlock(x, y, 0);
+					if (blockToUpdate != null) {
+						if (backChunk.getBlock(x, y, Chunk.SIZE - 1) == null) {
+							blockToUpdate.hasZMNeighbor = false;
+						} else {
+							blockToUpdate.hasZMNeighbor = true;
+						}	
+						determineIfBlockShouldBeRendered(blockToUpdate);
+					}
+				}
+			}
+		}
+	}
 }
