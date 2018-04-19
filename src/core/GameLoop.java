@@ -33,7 +33,7 @@ public class GameLoop {
 		
 		camera = new Camera(new Vector3f(0, 0, 0));
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
-		world = new World(1, 3, 1);
+		world = new World(4, 4, 4);
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix(), world);
 	}
 

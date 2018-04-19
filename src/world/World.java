@@ -78,7 +78,6 @@ public class World {
 				if (blockToUpdate == null) {
 					continue;
 				}
-				System.out.println("Updating block neighbor");
 				if (secondChunk.getBlock(x, 0, z) == null) {
 					blockToUpdate.hasYPNeighbor = false;
 				} else {
@@ -99,7 +98,6 @@ public class World {
 				if (blockToUpdate == null) {
 					continue;
 				}
-				System.out.println("Updating block neighbor");
 				if (secondChunk.getBlock(x, Chunk.SIZE - 1, z) == null) {
 					blockToUpdate.hasYMNeighbor = false;
 				} else {
