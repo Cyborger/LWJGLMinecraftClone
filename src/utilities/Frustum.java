@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.util.vector.Matrix4f;
 
 import entities.Camera;
@@ -46,21 +47,24 @@ public class Frustum {
 	}
 
 	private void calculateFrustum(Camera camera, MasterRenderer renderer) {
-		Matrix4f matrix = renderer.getProjectionMatrix();
-		Matrix4f viewMatrix = renderer.getViewMatrix(camera);
 		this._proj.clear();
 		this._modl.clear();
 		this._clip.clear();
 
-		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, this._proj);
-		 
-        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, this._modl);
+		this._proj.rewind();
+		renderer.getProjectionMatrix().store(_proj);
+		this._proj.rewind();
+		this._proj.get(proj);
 		
+		this._modl.rewind();
+		renderer.getViewMatrix(camera).store(_modl);
+		this._modl.rewind();
+		this._modl.get(modl);
 
-		this._proj.flip().limit(16);
+		/*this._proj.flip().limit(16);
 		this._proj.get(this.proj);
 		this._modl.flip().limit(16);
-		this._modl.get(this.modl);
+		this._modl.get(this.modl);*/
 
 
 		this.clip[0] = (this.modl[0] * this.proj[0] + this.modl[1] * this.proj[4] + this.modl[2] * this.proj[8] + this.modl[3] * this.proj[12]);

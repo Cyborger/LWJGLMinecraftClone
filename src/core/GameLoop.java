@@ -33,9 +33,9 @@ public class GameLoop {
 		DisplayManager.CreateDisplay();
 		renderer = new MasterRenderer();
 		
-		camera = new Camera(new Vector3f(0, 0, 0));
+		camera = new Camera(new Vector3f(-5, 0, 0));
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
-		world = new World(2, 1, 1);
+		world = new World(5, 5, 5);
 		frustum = new Frustum();
 	}
 
@@ -44,18 +44,22 @@ public class GameLoop {
 			// Update
 			camera.move();
 			
+			
 			// Render
 			processBlockEntities();
 			renderer.render(light, camera);
 			DisplayManager.UpdateDisplay();
+			System.out.println(DisplayManager.getDeltaInMilliseconds());
 		}
 		
 	}
 
 	static void processBlockEntities() {
 		for (Chunk chunk : world.getChunks()) {
-			for (Block block : chunk.getBlocksToRender()) {
-				renderer.processEntity(block);
+			if(Frustum.getFrustum(camera, renderer).cubeInFrustum(chunk.x, chunk.y, chunk.z, chunk.x + Chunk.SIZE, chunk.y + Chunk.SIZE, chunk.z + Chunk.SIZE)) {
+				for (Block block : chunk.getBlocksToRender()) {
+					renderer.processEntity(block);
+				}
 			}
 		}
 	}
