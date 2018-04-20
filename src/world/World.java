@@ -21,7 +21,8 @@ public class World {
 		for (Chunk chunk : chunks) {
 			if (chunk.positionWithinChunk(block.getPosition())) {
 				chunk.addBlock(block);
-				determineIfBlockIsOnSide(chunk, block);
+				int[] localCoords = chunk.getLocalCoordinates(block);
+				updateChunkSide(chunk, localCoords[0], localCoords[1], localCoords[2]);
 			}
 		}
 	}
@@ -30,6 +31,7 @@ public class World {
 		for (Chunk chunk : chunks) {
 			if (chunk.positionWithinChunk(new Vector3f(x, y, z))) {
 				chunk.removeBlock(x - chunk.x, y - chunk.y, z - chunk.z);
+				updateChunkSide(chunk, x - chunk.x, y - chunk.y, z - chunk.z);
 			}
 		}
 	}
@@ -62,27 +64,68 @@ public class World {
 		}
 	}
 	
-	private void determineIfBlockIsOnSide(Chunk chunk, Block block) {
-		// Check for bordering right side
-		if (block.getPosition().x == chunk.x + Chunk.SIZE - 1) {
-			Chunk neighborChunk = getChunkNeighbor(chunk, 1, 0, 0);
-			if (neighborChunk != null) {
-				System.out.println("Updating right side of chunk");
-				int blockY = chunk.getLocalCoordinates(block)[1];
-				int blockZ = chunk.getLocalCoordinates(block)[2];
-				block.hasXPNeighbor = neighborChunk.getBlock(0, blockY, blockZ) != null;
-				neighborChunk.getBlock(0, blockY, blockZ).hasXMNeighbor = block != null;
-			}
-		}
+	private void updateChunkSide(Chunk chunk, int indexX, int indexY, int indexZ) {
+		Block block = chunk.getBlock(indexX, indexY, indexZ);
 		// Check for bordering left side
-		if (block.getPosition().x == chunk.x) {
+		if (indexX == 0) {
 			Chunk neighborChunk = getChunkNeighbor(chunk, -1, 0, 0);
 			if (neighborChunk != null) {
-				System.out.println("Updating left side of chunk");
-				int blockY = chunk.getLocalCoordinates(block)[1];
-				int blockZ = chunk.getLocalCoordinates(block)[2];
-				block.hasXMNeighbor = neighborChunk.getBlock(Chunk.SIZE - 1, blockY, blockZ) != null;
-				neighborChunk.getBlock(Chunk.SIZE - 1, blockY, blockZ).hasXPNeighbor = block != null;
+				Block neighborBlock = neighborChunk.getBlock(Chunk.SIZE - 1, indexY, indexZ);
+				block.hasXMNeighbor = neighborBlock != null;
+				neighborBlock.hasXPNeighbor = block != null;
+			}
+		}
+		// Check for bordering right side
+		if (indexX == Chunk.SIZE - 1) {
+			Chunk neighborChunk = getChunkNeighbor(chunk, 1, 0, 0);
+			if (neighborChunk != null) {	
+				Block neighborBlock = neighborChunk.getBlock(0, indexY, indexZ);
+				block.hasXPNeighbor = neighborBlock != null;
+				neighborBlock.hasXMNeighbor = block != null;
+			}
+		}
+		// Check for bordering bottom side
+		if (indexY == 0) {
+			Chunk neighborChunk = getChunkNeighbor(chunk, 0, -1, 0);
+			if (neighborChunk != null) {
+				Block neighborBlock = neighborChunk.getBlock(indexX, Chunk.SIZE - 1, indexZ);
+				block.hasYMNeighbor = neighborBlock != null;
+				neighborBlock.hasYPNeighbor = block != null;
+			}
+		}
+		// Check for bordering top side
+		if (indexY == Chunk.SIZE - 1) {
+			Chunk neighborChunk = getChunkNeighbor(chunk, 0, 1, 0);
+			if (neighborChunk != null) {
+				Block neighborBlock = neighborChunk.getBlock(0, indexY, indexZ);
+				block.hasYPNeighbor = neighborBlock != null;
+				neighborBlock.hasYMNeighbor = block != null;
+			}
+		}
+		// Check for bordering front side
+		if (indexZ == 0) {
+			Chunk neighborChunk = getChunkNeighbor(chunk, 0, 0, -1);
+			if (neighborChunk != null) {
+				Block neighborBlock = neighborChunk.getBlock(indexX, indexY, Chunk.SIZE - 1);
+				if (block != null) {
+					block.hasZMNeighbor = neighborBlock != null;
+				}
+				if (neighborBlock != null) {
+					neighborBlock.hasZPNeighbor = block != null;
+				}
+			}
+		}
+		// Check for bordering back side
+		if (indexZ == Chunk.SIZE - 1) {
+			Chunk neighborChunk = getChunkNeighbor(chunk, 0, 0, 1);
+			if (neighborChunk != null) {
+				Block neighborBlock = neighborChunk.getBlock(indexX, indexY, 0);
+				if (block != null) {
+					block.hasZPNeighbor = neighborBlock != null;
+				}
+				if (neighborBlock != null) {
+					neighborBlock.hasZMNeighbor = block != null;
+				}
 			}
 		}
 	}
