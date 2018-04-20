@@ -6,6 +6,7 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
+import entities.DirtBlock;
 
 public class World {
 	private Chunk[][][] chunkArray;
@@ -14,13 +15,13 @@ public class World {
 	public World(int chunks_wide, int chunks_high, int chunks_deep) {
 		chunkArray = new Chunk[chunks_wide][chunks_high][chunks_deep];
 		createChunks(chunks_wide, chunks_high, chunks_deep);
-		updateAllChunkSides();
 	}
 	
 	public void placeBlock(Block block) {
 		for (Chunk chunk : chunks) {
 			if (chunk.positionWithinChunk(block.getPosition())) {
 				chunk.addBlock(block);
+				determineIfBlockIsOnSide(chunk, block);
 			}
 		}
 	}
@@ -37,9 +38,10 @@ public class World {
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
 				for (int z = 0; z < depth; ++z) {
-					Chunk newChunk = new Chunk(x * Chunk.SIZE, y * Chunk.SIZE, z * Chunk.SIZE);
-					chunkArray[x][y][z] = newChunk;
-					chunks.add(newChunk);
+					Chunk chunk = new Chunk(x * Chunk.SIZE, y * Chunk.SIZE, z * Chunk.SIZE);
+					chunkArray[x][y][z] = chunk;
+					chunks.add(chunk);
+					fillChunk(chunk);
 				}
 			}
 		}
@@ -49,23 +51,35 @@ public class World {
 		return chunks;
 	}
 	
+	private void fillChunk(Chunk chunk) {
+		for (int x = 0; x < Chunk.SIZE; ++x) {
+			for (int y = 0; y < Chunk.SIZE; ++y) {
+				for (int z = 0; z < Chunk.SIZE; ++z) {
+					Vector3f blockPosition = new Vector3f(x + chunk.x, y + chunk.y, z + chunk.z);
+					placeBlock(new DirtBlock(blockPosition));
+				}
+			}
+		}
+	}
+	
+	private void determineIfBlockIsOnSide(Chunk chunk, Block block) {
+		if (block.getPosition().x == chunk.x + Chunk.SIZE - 1 &&
+				getChunkNeighbor(chunk, 1, 0, 0) != null) {
+		}
+	}
+	
+	private Chunk getChunkNeighbor(Chunk chunk, int dx, int dy, int dz) {
+		int indexX = Math.round(chunk.x / Chunk.SIZE);
+		int indexY = Math.round(chunk.y / Chunk.SIZE);
+		int indexZ = Math.round(chunk.z / Chunk.SIZE);
+		return getChunk(indexX + dx, indexY + dy, indexZ + dz);
+	}
+	
 	private Chunk getChunk(int x, int y, int z) {
 		try {
 			return chunkArray[x][y][z];
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return null;
-		}
-	}
-	
-	private void updateAllChunkSides() {
-		for (int x = 0; x < chunkArray.length; ++x) {
-			for (int y = 0; y < chunkArray[0].length; ++y) {
-				for (int z = 0; z < chunkArray[0][0].length; ++z) {
-					chunkArray[x][y][z].updateTopAndBottomSides(getChunk(x, y + 1, z), getChunk(x, y - 1, z));
-					chunkArray[x][y][z].updateRightAndLeftSides(getChunk(x + 1, y, z), getChunk(x - 1, y, z));
-					chunkArray[x][y][z].updateFrontAndBackSides(getChunk(x, y, z + 1), getChunk(x, y, z - 1));
-				}
-			}
 		}
 	}
 }
