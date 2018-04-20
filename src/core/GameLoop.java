@@ -36,8 +36,9 @@ public class GameLoop {
 		renderer = new MasterRenderer();
 		camera = new Camera(new Vector3f(-5, 0, 0));
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
-		world = new World(2, 2, 2);
+		world = new World(10, 10, 10);
 		frustum = new Frustum();
+		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix(), world);
 	}
 
 	static void loop() {
@@ -45,7 +46,7 @@ public class GameLoop {
 		while (!Display.isCloseRequested()) {
 			// Update
 			camera.move();
-			
+			mousePicker.update();			
 			while(Keyboard.next()) {
 				if (Keyboard.getEventKey() == Keyboard.KEY_G) {
 					world.removeBlock(7, 7, counter);

@@ -61,12 +61,6 @@ public class Frustum {
 		this._modl.rewind();
 		this._modl.get(modl);
 
-		/*this._proj.flip().limit(16);
-		this._proj.get(this.proj);
-		this._modl.flip().limit(16);
-		this._modl.get(this.modl);*/
-
-
 		this.clip[0] = (this.modl[0] * this.proj[0] + this.modl[1] * this.proj[4] + this.modl[2] * this.proj[8] + this.modl[3] * this.proj[12]);
 		this.clip[1] = (this.modl[0] * this.proj[1] + this.modl[1] * this.proj[5] + this.modl[2] * this.proj[9] + this.modl[3] * this.proj[13]);
 		this.clip[2] = (this.modl[0] * this.proj[2] + this.modl[1] * this.proj[6] + this.modl[2] * this.proj[10] + this.modl[3] * this.proj[14]);
