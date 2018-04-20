@@ -16,6 +16,7 @@ public abstract class Block extends Entity {
 	protected Block(TexturedModel model, Vector3f position) {
 		super(model, position, 0, 0, 0, 1);
 	}
+	
 	public boolean shouldRender() {
 		if (!(hasXPNeighbor && hasXMNeighbor && hasYPNeighbor && hasYMNeighbor && hasZPNeighbor && hasZMNeighbor)) {
 			return true;

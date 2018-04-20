@@ -63,8 +63,27 @@ public class World {
 	}
 	
 	private void determineIfBlockIsOnSide(Chunk chunk, Block block) {
-		if (block.getPosition().x == chunk.x + Chunk.SIZE - 1 &&
-				getChunkNeighbor(chunk, 1, 0, 0) != null) {
+		// Check for bordering right side
+		if (block.getPosition().x == chunk.x + Chunk.SIZE - 1) {
+			Chunk neighborChunk = getChunkNeighbor(chunk, 1, 0, 0);
+			if (neighborChunk != null) {
+				System.out.println("Updating right side of chunk");
+				int blockY = chunk.getLocalCoordinates(block)[1];
+				int blockZ = chunk.getLocalCoordinates(block)[2];
+				block.hasXPNeighbor = neighborChunk.getBlock(0, blockY, blockZ) != null;
+				neighborChunk.getBlock(0, blockY, blockZ).hasXMNeighbor = block != null;
+			}
+		}
+		// Check for bordering left side
+		if (block.getPosition().x == chunk.x) {
+			Chunk neighborChunk = getChunkNeighbor(chunk, -1, 0, 0);
+			if (neighborChunk != null) {
+				System.out.println("Updating left side of chunk");
+				int blockY = chunk.getLocalCoordinates(block)[1];
+				int blockZ = chunk.getLocalCoordinates(block)[2];
+				block.hasXMNeighbor = neighborChunk.getBlock(Chunk.SIZE - 1, blockY, blockZ) != null;
+				neighborChunk.getBlock(Chunk.SIZE - 1, blockY, blockZ).hasXPNeighbor = block != null;
+			}
 		}
 	}
 	

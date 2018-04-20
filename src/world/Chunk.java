@@ -23,11 +23,9 @@ public class Chunk {
 	}
 	
 	public void addBlock(Block block) {
-		int xIndex = (int) block.getPosition().x - this.x;
-		int yIndex = (int) block.getPosition().y - this.y;
-		int zIndex = (int) block.getPosition().z - this.z;
-		blockArray[xIndex][yIndex][zIndex] = block;
-		updateBlockNeighbors(xIndex, yIndex, zIndex);
+		int[] indices = getLocalCoordinates(block);
+		blockArray[indices[0]][indices[1]][indices[2]] = block;
+		updateBlockNeighbors(indices[0], indices[1], indices[2]);
 	}
 	
 	public void removeBlock(int x, int y, int z) {
@@ -92,6 +90,14 @@ public class Chunk {
 		} else if (!block.shouldRender() && blocksToRender.contains(block)) {
 			blocksToRender.remove(block);
 		}
+	}
+	
+	public int[] getLocalCoordinates(Block block) {
+		int xIndex = (int) block.getPosition().x - this.x;
+		int yIndex = (int) block.getPosition().y - this.y;
+		int zIndex = (int) block.getPosition().z - this.z;
+		int[] coords = {xIndex, yIndex, zIndex};
+		return coords;
 	}
 	
 	private boolean outsideChunk(int value) {
