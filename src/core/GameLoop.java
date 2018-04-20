@@ -34,14 +34,9 @@ public class GameLoop {
 	static void setup() {
 		DisplayManager.CreateDisplay();
 		renderer = new MasterRenderer();
-		
 		camera = new Camera(new Vector3f(-5, 0, 0));
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
-<<<<<<< HEAD
-		world = new World(5, 5, 5);
-=======
 		world = new World(2, 2, 2);
->>>>>>> 8bce0bd2b59734f63b6eecff5725a410435cef6e
 		frustum = new Frustum();
 	}
 
@@ -50,10 +45,7 @@ public class GameLoop {
 		while (!Display.isCloseRequested()) {
 			// Update
 			camera.move();
-<<<<<<< HEAD
 			
-			
-=======
 			while(Keyboard.next()) {
 				if (Keyboard.getEventKey() == Keyboard.KEY_G) {
 					world.removeBlock(7, 7, counter);
@@ -62,7 +54,6 @@ public class GameLoop {
 					world.placeBlock(new DirtBlock(new Vector3f(7, 7, --counter)));
 				}
 			}
->>>>>>> 8bce0bd2b59734f63b6eecff5725a410435cef6e
 			// Render
 			processBlockEntities();
 			renderer.render(light, camera);
