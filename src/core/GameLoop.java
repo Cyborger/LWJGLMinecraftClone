@@ -1,23 +1,21 @@
 package core;
 
-<<<<<<< HEAD
 import java.util.Arrays;
-
 import org.lwjgl.input.Keyboard;
-=======
->>>>>>> 158e33065587620c3b89c38ead5c134d09d535c0
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
 import entities.Camera;
 import entities.Light;
+import entities.blocks.DirtBlock;
 import loader.Loader;
 import renderEngine.DisplayManager;
 import renderEngine.MasterRenderer;
 import utilities.Frustum;
 import world.Chunk;
 import world.World;
+import utilities.MousePicker;
 
 public class GameLoop {
 
@@ -26,6 +24,7 @@ public class GameLoop {
 	static Camera camera;
 	static World world;
 	static Frustum frustum;
+	static MousePicker mousePicker;
 	
 	public static void main(String[] args) {
 		setup();
@@ -40,10 +39,11 @@ public class GameLoop {
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
 		world = new World(2, 1, 2);
 		frustum = new Frustum();
+		mousePicker = new MousePicker(camera, null, world);
 	}
 
 	static void loop() {
-<<<<<<< HEAD
+
 		int counter = 0;
 		boolean done = false;
 		while (!Display.isCloseRequested()) {
@@ -68,21 +68,13 @@ public class GameLoop {
 					world.placeBlock(new DirtBlock(new Vector3f(7, 7, --counter)));
 				}
 			}
-=======
-		while (!Display.isCloseRequested()) {
-			// Update
-			camera.move();
 
->>>>>>> 158e33065587620c3b89c38ead5c134d09d535c0
 			// Render
 			processBlockEntities();
 			renderer.render(light, camera);
 			DisplayManager.UpdateDisplay();
-<<<<<<< HEAD
+
 			//System.out.println(DisplayManager.getDeltaInMilliseconds());
-=======
->>>>>>> 158e33065587620c3b89c38ead5c134d09d535c0
-		}
 		
 	}
 
