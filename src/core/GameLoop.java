@@ -1,5 +1,7 @@
 package core;
 
+import java.util.Arrays;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -36,21 +38,32 @@ public class GameLoop {
 		renderer = new MasterRenderer();
 		camera = new Camera(new Vector3f(-5, 0, 0));
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
-		world = new World(10, 10, 10);
+		world = new World(2, 1, 2);
 		frustum = new Frustum();
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix(), world);
 	}
 
 	static void loop() {
 		int counter = 0;
+		boolean done = false;
 		while (!Display.isCloseRequested()) {
 			// Update
 			camera.move();
 			mousePicker.update();			
 			while(Keyboard.next()) {
 				if (Keyboard.getEventKey() == Keyboard.KEY_G) {
-					world.removeBlock(7, 7, counter);
-					++counter;
+					if(!done) {
+						if(world.blockToBreak(mousePicker.getTerrainPoint()) != new int[] {-1, -1, -1}) {
+							done = true;
+							int[] test = world.blockToBreak(mousePicker.getTerrainPoint());
+							world.removeBlock(test[0], test[1], test[2]);
+						} else {
+							done = true;
+						}
+					} else if(done && !Keyboard.isKeyDown(Keyboard.KEY_W)) {
+						done = false;
+					}
+					
 				} else if (Keyboard.getEventKey() == Keyboard.KEY_H) {
 					world.placeBlock(new DirtBlock(new Vector3f(7, 7, --counter)));
 				}
@@ -59,7 +72,7 @@ public class GameLoop {
 			processBlockEntities();
 			renderer.render(light, camera);
 			DisplayManager.UpdateDisplay();
-			System.out.println(DisplayManager.getDeltaInMilliseconds());
+			//System.out.println(DisplayManager.getDeltaInMilliseconds());
 		}
 		
 	}

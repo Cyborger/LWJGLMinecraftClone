@@ -144,4 +144,14 @@ public class World {
 			return null;
 		}
 	}
+
+	public int[] blockToBreak(Vector3f terrainPoint) {
+		for(Chunk chunk : chunks) {
+			if(chunk.getBlock((int)terrainPoint.x, (int)terrainPoint.y, (int)terrainPoint.z) != null) {
+				Block blocktoReturn = chunk.getBlock((int)Math.floor(terrainPoint.x), (int)Math.floor(terrainPoint.y), (int)Math.floor(terrainPoint.z));
+				return new int[] {(int)blocktoReturn.getPosition().x, (int)blocktoReturn.getPosition().y, (int)blocktoReturn.getPosition().z};
+			} 
+		}
+		return new int[] {-1, -1, -1};
+	}
 }

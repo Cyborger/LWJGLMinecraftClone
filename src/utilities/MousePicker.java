@@ -1,21 +1,17 @@
 package utilities;
 
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
-import entities.Block;
 import entities.Camera;
-import world.Chunk;
 import world.World;
 
 public class MousePicker {
 	
-	private static final int RECURSION_COUNT = 200;
-	private static final float RAY_RANGE = 600;
+	private static final float RAY_RANGE = 5;
 	
 	private Vector3f currentRay;
 	
@@ -43,7 +39,8 @@ public class MousePicker {
 	public void update() {
 		viewMatrix = MatrixMath.createViewMatrix(camera);
 		currentRay = calculateMouseRay();
-		System.out.println(getPointOnRay(currentRay, RAY_RANGE));
+		currentTerrainPoint = getPointOnRay(currentRay, RAY_RANGE);
+		System.out.println(getPointOnRay(currentRay, RAY_RANGE)  );
 	}
 
 	private Vector3f calculateMouseRay() {
