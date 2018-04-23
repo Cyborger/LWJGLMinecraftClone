@@ -105,7 +105,7 @@ public class Chunk {
 	}
 	
 	private boolean outsideChunk(int value) {
-		if (value == -1 || value == 16) {
+		if (value == -1 || value == Chunk.SIZE) {
 			return true;
 		}
 		return false;
