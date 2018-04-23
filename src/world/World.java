@@ -6,7 +6,7 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
-import entities.DirtBlock;
+import entities.blocks.DirtBlock;
 
 public class World {
 	private Chunk[][][] chunkArray;
@@ -71,17 +71,29 @@ public class World {
 			Chunk neighborChunk = getChunkNeighbor(chunk, -1, 0, 0);
 			if (neighborChunk != null) {
 				Block neighborBlock = neighborChunk.getBlock(Chunk.SIZE - 1, indexY, indexZ);
-				block.hasXMNeighbor = neighborBlock != null;
-				neighborBlock.hasXPNeighbor = block != null;
+				if (block != null) {
+					block.hasXMNeighbor = neighborBlock != null;
+					chunk.determineIfBlockShouldBeRendered(block);
+				}
+				if (neighborBlock != null) {
+					neighborBlock.hasXPNeighbor = block != null;
+					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
+				}
 			}
 		}
 		// Check for bordering right side
 		if (indexX == Chunk.SIZE - 1) {
 			Chunk neighborChunk = getChunkNeighbor(chunk, 1, 0, 0);
-			if (neighborChunk != null) {	
+			if (neighborChunk != null) {
 				Block neighborBlock = neighborChunk.getBlock(0, indexY, indexZ);
-				block.hasXPNeighbor = neighborBlock != null;
-				neighborBlock.hasXMNeighbor = block != null;
+				if (block != null) {
+					block.hasXPNeighbor = neighborBlock != null;
+					chunk.determineIfBlockShouldBeRendered(block);
+				}
+				if (neighborBlock != null) {
+					neighborBlock.hasXMNeighbor = block != null;
+					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
+				}
 			}
 		}
 		// Check for bordering bottom side
@@ -89,8 +101,14 @@ public class World {
 			Chunk neighborChunk = getChunkNeighbor(chunk, 0, -1, 0);
 			if (neighborChunk != null) {
 				Block neighborBlock = neighborChunk.getBlock(indexX, Chunk.SIZE - 1, indexZ);
-				block.hasYMNeighbor = neighborBlock != null;
-				neighborBlock.hasYPNeighbor = block != null;
+				if (block != null) {
+					block.hasYMNeighbor = neighborBlock != null;
+				chunk.determineIfBlockShouldBeRendered(block);
+				}
+				if (neighborBlock != null) {
+					neighborBlock.hasYPNeighbor = block != null;
+					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
+				}
 			}
 		}
 		// Check for bordering top side
@@ -98,8 +116,14 @@ public class World {
 			Chunk neighborChunk = getChunkNeighbor(chunk, 0, 1, 0);
 			if (neighborChunk != null) {
 				Block neighborBlock = neighborChunk.getBlock(0, indexY, indexZ);
-				block.hasYPNeighbor = neighborBlock != null;
-				neighborBlock.hasYMNeighbor = block != null;
+				if (block != null) {
+					block.hasYPNeighbor = neighborBlock != null;
+					chunk.determineIfBlockShouldBeRendered(block);
+				}
+				if (neighborBlock != null) {
+					neighborBlock.hasYMNeighbor = block != null;
+					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
+				}
 			}
 		}
 		// Check for bordering front side
@@ -109,9 +133,11 @@ public class World {
 				Block neighborBlock = neighborChunk.getBlock(indexX, indexY, Chunk.SIZE - 1);
 				if (block != null) {
 					block.hasZMNeighbor = neighborBlock != null;
+					chunk.determineIfBlockShouldBeRendered(block);
 				}
 				if (neighborBlock != null) {
 					neighborBlock.hasZPNeighbor = block != null;
+					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
 				}
 			}
 		}
@@ -122,9 +148,11 @@ public class World {
 				Block neighborBlock = neighborChunk.getBlock(indexX, indexY, 0);
 				if (block != null) {
 					block.hasZPNeighbor = neighborBlock != null;
+					chunk.determineIfBlockShouldBeRendered(block);
 				}
 				if (neighborBlock != null) {
 					neighborBlock.hasZMNeighbor = block != null;
+					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
 				}
 			}
 		}
@@ -134,6 +162,7 @@ public class World {
 		int indexX = Math.round(chunk.x / Chunk.SIZE);
 		int indexY = Math.round(chunk.y / Chunk.SIZE);
 		int indexZ = Math.round(chunk.z / Chunk.SIZE);
+		System.out.println(indexX + ", " + indexY + ", " + indexZ);
 		return getChunk(indexX + dx, indexY + dy, indexZ + dz);
 	}
 	
