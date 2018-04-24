@@ -6,14 +6,18 @@ import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
 import entities.Camera;
+import entities.Entity;
 import entities.Light;
 import loader.Loader;
+import models.RawModel;
+import models.Texture;
+import models.TexturedModel;
 import renderEngine.DisplayManager;
 import renderEngine.MasterRenderer;
 import utilities.Frustum;
+import utilities.MousePicker;
 import world.Chunk;
 import world.World;
-import utilities.MousePicker;
 
 public class GameLoop {
 
@@ -24,7 +28,7 @@ public class GameLoop {
 	static Frustum frustum;
 	static MousePicker mousePicker;
 	static boolean leftMousePressed;
-
+	static Entity deathPig;
 	public static void main(String[] args) {
 		setup();
 		loop();
@@ -39,6 +43,9 @@ public class GameLoop {
 		world = new World(2, 1, 2);
 		frustum = new Frustum();
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
+		Texture pigTexture = new Texture(Loader.loadTexture("tree"));
+		RawModel cubeModel = Loader.loadOBJ("death");
+		deathPig = new Entity(new TexturedModel(cubeModel, pigTexture), new Vector3f(20,16,20), 0, 0, 0, 0.25f);
 	}
 
 	static void loop() {
@@ -49,6 +56,7 @@ public class GameLoop {
 
 			// Render
 			processBlockEntities();
+			renderer.processEntity(deathPig);
 			renderer.render(light, camera);
 			DisplayManager.UpdateDisplay();
 		}
