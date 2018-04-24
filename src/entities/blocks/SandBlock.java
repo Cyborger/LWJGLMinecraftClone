@@ -10,11 +10,11 @@ import models.TexturedModel;
 
 public class SandBlock extends Block {
 
-	static Texture dirtTexture = new Texture(Loader.loadTexture("sand"));
+	static Texture sandTexture = new Texture(Loader.loadTexture("sand"));
 	static RawModel cubeModel = Loader.loadOBJ("block");
-	static TexturedModel dirtModel = new TexturedModel(cubeModel, dirtTexture);
+	static TexturedModel sandModel = new TexturedModel(cubeModel, sandTexture);
 
-	protected SandBlock(TexturedModel model, Vector3f position) {
-		super(model, position);
+	public SandBlock(Vector3f position) {
+		super(sandModel, position);
 	}
 }
