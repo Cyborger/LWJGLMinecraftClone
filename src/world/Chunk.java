@@ -28,10 +28,12 @@ public class Chunk {
 		updateBlockNeighbors(indices[0], indices[1], indices[2]);
 	}
 
-	public void removeBlock(int x, int y, int z) {
+	public boolean removeBlock(int x, int y, int z) {
+		boolean blockExists = getBlock(x, y, z) != null;
 		blocksToRender.remove(getBlock(x, y, z));
 		blockArray[x][y][z] = null;
 		updateBlockNeighbors(x, y, z);
+		return blockExists;
 	}
 
 	public Block getBlock(int x, int y, int z) {

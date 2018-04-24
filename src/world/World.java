@@ -27,13 +27,15 @@ public class World {
 		}
 	}
 
-	public void removeBlock(int x, int y, int z) {
+	public boolean removeBlock(int x, int y, int z) {
 		for (Chunk chunk : chunks) {
 			if (chunk.positionWithinChunk(new Vector3f(x, y, z))) {
-				chunk.removeBlock(x - chunk.x, y - chunk.y, z - chunk.z);
+				boolean blockDestroyed = chunk.removeBlock(x - chunk.x, y - chunk.y, z - chunk.z);
 				updateChunkSide(chunk, x - chunk.x, y - chunk.y, z - chunk.z);
+				return blockDestroyed;
 			}
 		}
+		return false;
 	}
 
 	public void createChunks(int width, int height, int depth) {

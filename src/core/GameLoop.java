@@ -45,7 +45,6 @@ public class GameLoop {
 		while (!Display.isCloseRequested()) {
 			// Update
 			camera.move();
-			mousePicker.update();
 			checkForMousePress();
 
 			// Render
@@ -57,12 +56,17 @@ public class GameLoop {
 
 	static void checkForMousePress() {
 		if (Mouse.isButtonDown(0) && !leftMousePressed) {
-			Vector3f blockCoords = mousePicker.getTerrainPoint();
-			if (blockCoords != null) {
-				int blockX = (int) Math.floor(blockCoords.x);
-				int blockY = (int) Math.floor(blockCoords.y);
-				int blockZ = (int) Math.floor(blockCoords.z);
-				world.removeBlock(blockX, blockY, blockZ);
+			for (float x = 0; x < 8; x += 0.5) {
+				Vector3f blockCoords = mousePicker.getTerrainPoint(x);
+				if (blockCoords != null) {
+					int blockX = Math.round(blockCoords.x);
+					int blockY = Math.round(blockCoords.y);
+					int blockZ = Math.round(blockCoords.z);
+					if(world.removeBlock(blockX, blockY, blockZ)) {
+						leftMousePressed = Mouse.isButtonDown(0);
+						return;
+					}
+				}
 			}
 		}
 		leftMousePressed = Mouse.isButtonDown(0);

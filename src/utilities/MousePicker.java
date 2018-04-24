@@ -18,8 +18,6 @@ public class MousePicker {
 	private Matrix4f viewMatrix;
 	private Camera camera;
 
-	private Vector3f currentTerrainPoint;
-
 	public MousePicker(Camera camera, Matrix4f projection) {
 		this.camera = camera;
 		this.projectionMatrix = projection;
@@ -29,15 +27,10 @@ public class MousePicker {
 		return currentRay;
 	}
 
-	public Vector3f getTerrainPoint() {
-		return currentTerrainPoint;
-	}
-
-	public void update() {
+	public Vector3f getTerrainPoint(float lengthOfRay) {
 		viewMatrix = MatrixMath.createViewMatrix(camera);
 		currentRay = calculateMouseRay();
-		currentTerrainPoint = getPointOnRay(currentRay, RAY_RANGE);
-		System.out.println(getPointOnRay(currentRay, RAY_RANGE));
+		return getPointOnRay(currentRay, lengthOfRay);
 	}
 
 	private Vector3f calculateMouseRay() {
