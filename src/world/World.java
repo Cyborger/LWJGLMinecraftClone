@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
 import entities.blocks.DirtBlock;
+import entities.blocks.SandBlock;
 
 public class World {
 	private Chunk[][][] chunkArray;
@@ -45,7 +46,9 @@ public class World {
 					Chunk chunk = new Chunk(x * Chunk.SIZE, y * Chunk.SIZE, z * Chunk.SIZE);
 					chunkArray[x][y][z] = chunk;
 					chunks.add(chunk);
-					fillChunk(chunk);
+					if (y == 0) {
+						fillChunk(chunk);
+					}
 				}
 			}
 		}
