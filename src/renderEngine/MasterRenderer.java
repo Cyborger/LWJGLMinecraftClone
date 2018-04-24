@@ -52,11 +52,11 @@ public class MasterRenderer {
 		shader.stop();
 		entities.clear();
 	}
-	
+
 	public Matrix4f getProjectionMatrix() {
 		return projectionMatrix;
 	}
-	
+
 	public Matrix4f getViewMatrix(Camera camera) {
 		return MatrixMath.createViewMatrix(camera);
 	}

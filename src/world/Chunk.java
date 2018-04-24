@@ -12,53 +12,52 @@ public class Chunk {
 	public int x;
 	public int y;
 	public int z;
-	
+
 	private Block[][][] blockArray = new Block[SIZE][SIZE][SIZE];
 	private ArrayList<Block> blocksToRender = new ArrayList<Block>();
-	
+
 	public Chunk(int x, int y, int z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
-	
+
 	public void addBlock(Block block) {
 		int[] indices = getLocalCoordinates(block);
 		blockArray[indices[0]][indices[1]][indices[2]] = block;
 		updateBlockNeighbors(indices[0], indices[1], indices[2]);
 	}
-	
+
 	public void removeBlock(int x, int y, int z) {
 		blocksToRender.remove(getBlock(x, y, z));
 		blockArray[x][y][z] = null;
 		updateBlockNeighbors(x, y, z);
 	}
-	
+
 	public Block getBlock(int x, int y, int z) {
 		try {
 			return blockArray[x][y][z];
-		} catch(ArrayIndexOutOfBoundsException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
 			return null;
 		}
 	}
-	
-	public Block[][][] getBlocks(){
+
+	public Block[][][] getBlocks() {
 		return blockArray;
 	}
-	
+
 	public boolean positionWithinChunk(Vector3f position) {
-		if (position.x >= this.x && position.x < this.x + SIZE &&
-				position.y >= this.y && position.y < this.y + SIZE &&
-				position.z >= this.z && position.z < this.z + SIZE) {
+		if (position.x >= this.x && position.x < this.x + SIZE && position.y >= this.y && position.y < this.y + SIZE
+				&& position.z >= this.z && position.z < this.z + SIZE) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public ArrayList<Block> getBlocksToRender() {
 		return blocksToRender;
 	}
-	
+
 	private void updateBlockNeighbors(int x, int y, int z) {
 		updateBlockFlags(x, y, z);
 		updateBlockFlags(x + 1, y, z);
@@ -68,7 +67,7 @@ public class Chunk {
 		updateBlockFlags(x, y, z + 1);
 		updateBlockFlags(x, y, z - 1);
 	}
-	
+
 	private void updateBlockFlags(int x, int y, int z) {
 		Block block = getBlock(x, y, z);
 		if (block != null) {
@@ -87,7 +86,7 @@ public class Chunk {
 			determineIfBlockShouldBeRendered(block);
 		}
 	}
-	
+
 	public void determineIfBlockShouldBeRendered(Block block) {
 		if (block.shouldRender() && !blocksToRender.contains(block)) {
 			blocksToRender.add(block);
@@ -95,15 +94,15 @@ public class Chunk {
 			blocksToRender.remove(block);
 		}
 	}
-	
+
 	public int[] getLocalCoordinates(Block block) {
 		int xIndex = (int) block.getPosition().x - this.x;
 		int yIndex = (int) block.getPosition().y - this.y;
 		int zIndex = (int) block.getPosition().z - this.z;
-		int[] coords = {xIndex, yIndex, zIndex};
+		int[] coords = { xIndex, yIndex, zIndex };
 		return coords;
 	}
-	
+
 	private boolean outsideChunk(int value) {
 		if (value == -1 || value == Chunk.SIZE) {
 			return true;

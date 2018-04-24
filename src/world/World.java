@@ -16,7 +16,7 @@ public class World {
 		chunkArray = new Chunk[chunks_wide][chunks_high][chunks_deep];
 		createChunks(chunks_wide, chunks_high, chunks_deep);
 	}
-	
+
 	public void placeBlock(Block block) {
 		for (Chunk chunk : chunks) {
 			if (chunk.positionWithinChunk(block.getPosition())) {
@@ -26,7 +26,7 @@ public class World {
 			}
 		}
 	}
-	
+
 	public void removeBlock(int x, int y, int z) {
 		for (Chunk chunk : chunks) {
 			if (chunk.positionWithinChunk(new Vector3f(x, y, z))) {
@@ -35,7 +35,7 @@ public class World {
 			}
 		}
 	}
-	
+
 	public void createChunks(int width, int height, int depth) {
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
@@ -48,11 +48,11 @@ public class World {
 			}
 		}
 	}
-	
+
 	public List<Chunk> getChunks() {
 		return chunks;
 	}
-	
+
 	private void fillChunk(Chunk chunk) {
 		for (int x = 0; x < Chunk.SIZE; ++x) {
 			for (int y = 0; y < Chunk.SIZE; ++y) {
@@ -63,7 +63,7 @@ public class World {
 			}
 		}
 	}
-	
+
 	private void updateChunkSide(Chunk chunk, int indexX, int indexY, int indexZ) {
 		Block block = chunk.getBlock(indexX, indexY, indexZ);
 		// Check for bordering left side
@@ -103,7 +103,7 @@ public class World {
 				Block neighborBlock = neighborChunk.getBlock(indexX, Chunk.SIZE - 1, indexZ);
 				if (block != null) {
 					block.hasYMNeighbor = neighborBlock != null;
-				chunk.determineIfBlockShouldBeRendered(block);
+					chunk.determineIfBlockShouldBeRendered(block);
 				}
 				if (neighborBlock != null) {
 					neighborBlock.hasYPNeighbor = block != null;
@@ -157,7 +157,7 @@ public class World {
 			}
 		}
 	}
-	
+
 	private Chunk getChunkNeighbor(Chunk chunk, int dx, int dy, int dz) {
 		int indexX = Math.round(chunk.x / Chunk.SIZE);
 		int indexY = Math.round(chunk.y / Chunk.SIZE);
@@ -165,7 +165,7 @@ public class World {
 		System.out.println(indexX + ", " + indexY + ", " + indexZ);
 		return getChunk(indexX + dx, indexY + dy, indexZ + dz);
 	}
-	
+
 	private Chunk getChunk(int x, int y, int z) {
 		try {
 			return chunkArray[x][y][z];

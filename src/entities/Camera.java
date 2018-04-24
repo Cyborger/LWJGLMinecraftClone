@@ -4,7 +4,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
-
 public class Camera {
 
 	private Vector3f position;
@@ -13,13 +12,12 @@ public class Camera {
 	private float roll;
 	private float speed = 0.2f;
 
-
 	public Camera(Vector3f startPosition) {
 		this.position = startPosition;
 	}
 
 	public void move() {
-	
+
 		float arg_yaw = Mouse.getDX();
 		yaw += arg_yaw / 10;
 		float arg_roll = Mouse.getDY();
@@ -58,7 +56,7 @@ public class Camera {
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			position.y -= 0.2f;
-		}	
+		}
 	}
 
 	public Vector3f getPosition() {
