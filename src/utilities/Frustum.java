@@ -8,18 +8,8 @@ import entities.Camera;
 import renderEngine.MasterRenderer;
 
 public class Frustum {
+	
 	public float[][] m_Frustum = new float[6][4];
-	public static final int RIGHT = 0;
-	public static final int LEFT = 1;
-	public static final int BOTTOM = 2;
-	public static final int TOP = 3;
-	public static final int BACK = 4;
-	public static final int FRONT = 5;
-	public static final int A = 0;
-	public static final int B = 1;
-	public static final int C = 2;
-	public static final int D = 3;
-	private static Frustum frustum = new Frustum();
 
 	private FloatBuffer _proj = BufferUtils.createFloatBuffer(16);
 	private FloatBuffer _modl = BufferUtils.createFloatBuffer(16);
@@ -27,11 +17,6 @@ public class Frustum {
 	float[] proj = new float[16];
 	float[] modl = new float[16];
 	float[] clip = new float[16];
-
-	public static Frustum getFrustum(Camera camera, MasterRenderer renderer) {
-		frustum.calculateFrustum(camera, renderer);
-		return frustum;
-	}
 
 	private void normalizePlane(float[][] frustum, int side) {
 		float magnitude = (float) Math.sqrt(frustum[side][0] * frustum[side][0] + frustum[side][1] * frustum[side][1]
@@ -43,7 +28,7 @@ public class Frustum {
 		frustum[side][3] /= magnitude;
 	}
 
-	private void calculateFrustum(Camera camera, MasterRenderer renderer) {
+	public void calculate(Camera camera, MasterRenderer renderer) {
 		this._proj.clear();
 		this._modl.clear();
 		this._clip.clear();
@@ -144,49 +129,6 @@ public class Frustum {
 				return false;
 			}
 		}
-
-		return true;
-	}
-
-	public boolean sphereInFrustum(float x, float y, float z, float radius) {
-		for (int i = 0; i < 6; i++) {
-			if (this.m_Frustum[i][0] * x + this.m_Frustum[i][1] * y + this.m_Frustum[i][2] * z
-					+ this.m_Frustum[i][3] <= -radius) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	public boolean cubeFullyInFrustum(float x1, float y1, float z1, float x2, float y2, float z2) {
-		for (int i = 0; i < 6; i++) {
-			if (this.m_Frustum[i][0] * x1 + this.m_Frustum[i][1] * y1 + this.m_Frustum[i][2] * z1
-					+ this.m_Frustum[i][3] <= 0.0F)
-				return false;
-			if (this.m_Frustum[i][0] * x2 + this.m_Frustum[i][1] * y1 + this.m_Frustum[i][2] * z1
-					+ this.m_Frustum[i][3] <= 0.0F)
-				return false;
-			if (this.m_Frustum[i][0] * x1 + this.m_Frustum[i][1] * y2 + this.m_Frustum[i][2] * z1
-					+ this.m_Frustum[i][3] <= 0.0F)
-				return false;
-			if (this.m_Frustum[i][0] * x2 + this.m_Frustum[i][1] * y2 + this.m_Frustum[i][2] * z1
-					+ this.m_Frustum[i][3] <= 0.0F)
-				return false;
-			if (this.m_Frustum[i][0] * x1 + this.m_Frustum[i][1] * y1 + this.m_Frustum[i][2] * z2
-					+ this.m_Frustum[i][3] <= 0.0F)
-				return false;
-			if (this.m_Frustum[i][0] * x2 + this.m_Frustum[i][1] * y1 + this.m_Frustum[i][2] * z2
-					+ this.m_Frustum[i][3] <= 0.0F)
-				return false;
-			if (this.m_Frustum[i][0] * x1 + this.m_Frustum[i][1] * y2 + this.m_Frustum[i][2] * z2
-					+ this.m_Frustum[i][3] <= 0.0F)
-				return false;
-			if (this.m_Frustum[i][0] * x2 + this.m_Frustum[i][1] * y2 + this.m_Frustum[i][2] * z2
-					+ this.m_Frustum[i][3] <= 0.0F)
-				return false;
-		}
-
 		return true;
 	}
 

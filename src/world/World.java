@@ -6,15 +6,16 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
-import entities.blocks.DirtBlock;
-import entities.blocks.SandBlock;
+import entities.blocks.GrassBlock;
 
 public class World {
 	private Chunk[][][] chunkArray;
 	private List<Chunk> chunks = new ArrayList<Chunk>();
+	public int worldHeight;
 
 	public World(int chunks_wide, int chunks_high, int chunks_deep) {
 		chunkArray = new Chunk[chunks_wide][chunks_high][chunks_deep];
+		worldHeight = chunks_high * Chunk.SIZE;
 		createChunks(chunks_wide, chunks_high, chunks_deep);
 	}
 
@@ -43,31 +44,30 @@ public class World {
 		return false;
 	}
 
-	public void createChunks(int width, int height, int depth) {
+	public List<Chunk> getChunks() {
+		return chunks;
+	}
+
+	private void createChunks(int width, int height, int depth) {
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
 				for (int z = 0; z < depth; ++z) {
 					Chunk chunk = new Chunk(x * Chunk.SIZE, y * Chunk.SIZE, z * Chunk.SIZE);
 					chunkArray[x][y][z] = chunk;
 					chunks.add(chunk);
-					if (y == 0) {
+					if (y < 5)
 						fillChunk(chunk);
-					}
 				}
 			}
 		}
 	}
-
-	public List<Chunk> getChunks() {
-		return chunks;
-	}
-
+	
 	private void fillChunk(Chunk chunk) {
 		for (int x = 0; x < Chunk.SIZE; ++x) {
 			for (int y = 0; y < Chunk.SIZE; ++y) {
 				for (int z = 0; z < Chunk.SIZE; ++z) {
 					Vector3f blockPosition = new Vector3f(x + chunk.x, y + chunk.y, z + chunk.z);
-					placeBlock(new DirtBlock(blockPosition));
+					placeBlock(new GrassBlock(blockPosition));
 				}
 			}
 		}
@@ -88,6 +88,9 @@ public class World {
 					neighborBlock.hasXPNeighbor = block != null;
 					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
 				}
+			} else if (block != null) {
+				block.hasXMNeighbor = true;
+				chunk.determineIfBlockShouldBeRendered(block);
 			}
 		}
 		// Check for bordering right side
@@ -103,6 +106,9 @@ public class World {
 					neighborBlock.hasXMNeighbor = block != null;
 					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
 				}
+			} else if (block != null) {
+				block.hasXPNeighbor = true;
+				chunk.determineIfBlockShouldBeRendered(block);
 			}
 		}
 		// Check for bordering bottom side
@@ -118,6 +124,9 @@ public class World {
 					neighborBlock.hasYPNeighbor = block != null;
 					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
 				}
+			} else if (block != null) {
+				block.hasYMNeighbor = true;
+				chunk.determineIfBlockShouldBeRendered(block);
 			}
 		}
 		// Check for bordering top side
@@ -132,6 +141,11 @@ public class World {
 				if (neighborBlock != null) {
 					neighborBlock.hasYMNeighbor = block != null;
 					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
+				}
+			} else if(block != null) {
+				if (block.getPosition().y == worldHeight) {
+					block.hasYPNeighbor = true;
+					chunk.determineIfBlockShouldBeRendered(block);
 				}
 			}
 		}
@@ -148,6 +162,9 @@ public class World {
 					neighborBlock.hasZPNeighbor = block != null;
 					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
 				}
+			} else if (block != null) {
+				block.hasZMNeighbor = true;
+				chunk.determineIfBlockShouldBeRendered(block);
 			}
 		}
 		// Check for bordering back side
@@ -163,6 +180,9 @@ public class World {
 					neighborBlock.hasZMNeighbor = block != null;
 					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
 				}
+			} else if (block != null) {
+				block.hasZPNeighbor = true;
+				chunk.determineIfBlockShouldBeRendered(block);
 			}
 		}
 	}
@@ -171,7 +191,6 @@ public class World {
 		int indexX = Math.round(chunk.x / Chunk.SIZE);
 		int indexY = Math.round(chunk.y / Chunk.SIZE);
 		int indexZ = Math.round(chunk.z / Chunk.SIZE);
-		System.out.println(indexX + ", " + indexY + ", " + indexZ);
 		return getChunk(indexX + dx, indexY + dy, indexZ + dz);
 	}
 

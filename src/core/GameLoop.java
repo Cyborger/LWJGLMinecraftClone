@@ -1,20 +1,12 @@
 package core;
 
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
 import entities.Camera;
-import entities.Entity;
 import entities.Light;
-import entities.blocks.DirtBlock;
-import entities.blocks.LeafBlock;
-import entities.blocks.TreeBlock;
 import loader.Loader;
-import models.RawModel;
-import models.Texture;
-import models.TexturedModel;
 import renderEngine.DisplayManager;
 import renderEngine.MasterRenderer;
 import utilities.Frustum;
@@ -32,7 +24,7 @@ public class GameLoop {
 	static MousePicker mousePicker;
 	static boolean leftMousePressed;
 	static boolean rightMousePressed;
-	static Entity deathPig;
+	
 	public static void main(String[] args) {
 		setup();
 		loop();
@@ -42,68 +34,31 @@ public class GameLoop {
 	static void setup() {
 		DisplayManager.CreateDisplay();
 		renderer = new MasterRenderer();
-		camera = new Camera(new Vector3f(-5, 0, 0));
+		camera = new Camera(new Vector3f(0, Chunk.SIZE * 5 + 2, 0));
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
-		world = new World(2, 2, 2);
+		world = new World(7, 10, 7);
 		frustum = new Frustum();
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
-		Texture pigTexture = new Texture(Loader.loadTexture("tree"));
-		RawModel cubeModel = Loader.loadOBJ("death");
-		deathPig = new Entity(new TexturedModel(cubeModel, pigTexture), new Vector3f(20,16,20), 0, 0, 0, 0.25f);
 	}
 
 	static void loop() {
 		while (!Display.isCloseRequested()) {
 			// Update
 			camera.move();
-			checkForMousePress();
+			mousePicker.update(world);
 
 			// Render
 			processBlockEntities();
-			renderer.processEntity(deathPig);
 			renderer.render(light, camera);
 			DisplayManager.UpdateDisplay();
+			System.out.println(DisplayManager.getDeltaInMilliseconds());
 		}
-	}
-
-	static void checkForMousePress() {
-		if (Mouse.isButtonDown(0) && !leftMousePressed) {
-			for (float x = 0; x < 8; x += 0.1) {
-				Vector3f blockCoords = mousePicker.getTerrainPoint(x);
-				if (blockCoords != null) {
-					int blockX = Math.round(blockCoords.x);
-					int blockY = Math.round(blockCoords.y);
-					int blockZ = Math.round(blockCoords.z);
-					if(world.removeBlock(blockX, blockY, blockZ)) {
-						leftMousePressed = Mouse.isButtonDown(0);
-						return;
-					}
-				}
-			}
-		}
-		if(Mouse.isButtonDown(1) && !rightMousePressed) {
-			for (float x = 8; x > 1; x -= 0.1) {
-				Vector3f blockCoords = mousePicker.getTerrainPoint(x);
-				if (blockCoords != null) {
-					int blockX = Math.round(blockCoords.x);
-					int blockY = Math.round(blockCoords.y);
-					int blockZ = Math.round(blockCoords.z);
-					Block blockToAdd = new DirtBlock(new Vector3f(blockX, blockY, blockZ));
-					if(world.placeBlock(blockToAdd)) {
-						rightMousePressed = Mouse.isButtonDown(1);
-						return;
-					}
-					
-				}
-			}
-		}
-		leftMousePressed = Mouse.isButtonDown(0);
-		rightMousePressed = Mouse.isButtonDown(1);
 	}
 
 	static void processBlockEntities() {
+		frustum.calculate(camera, renderer);
 		for (Chunk chunk : world.getChunks()) {
-			if (Frustum.getFrustum(camera, renderer).cubeInFrustum(chunk.x, chunk.y, chunk.z, chunk.x + Chunk.SIZE,
+			if (frustum.cubeInFrustum(chunk.x, chunk.y, chunk.z, chunk.x + Chunk.SIZE,
 					chunk.y + Chunk.SIZE, chunk.z + Chunk.SIZE)) {
 				for (Block block : chunk.getBlocksToRender()) {
 					renderer.processEntity(block);

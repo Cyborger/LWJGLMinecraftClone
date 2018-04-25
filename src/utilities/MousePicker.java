@@ -1,33 +1,72 @@
 package utilities;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
+import entities.Block;
 import entities.Camera;
+import entities.blocks.GrassBlock;
+import world.World;
 
 public class MousePicker {
-
-	private static final float RAY_RANGE = 5;
-
+	
 	private Vector3f currentRay;
 
 	private Matrix4f projectionMatrix;
 	private Matrix4f viewMatrix;
 	private Camera camera;
+	
+	private boolean leftMouseButtonPressed;
+	private boolean rightMouseButtonPressed;
+	private float intervalUpdateSize = 0.1f;
 
 	public MousePicker(Camera camera, Matrix4f projection) {
 		this.camera = camera;
 		this.projectionMatrix = projection;
 	}
 
-	public Vector3f getCurrentRay() {
-		return currentRay;
+	public void update(World world) {
+		if (Mouse.isButtonDown(0) && !leftMouseButtonPressed) {
+			for (float x = 0; x < 8; x += intervalUpdateSize) {
+				int[] blockCoords = getBlockCoords(x);
+				if (blockCoords != null) {
+					if (world.removeBlock(blockCoords[0], blockCoords[1], blockCoords[2]))
+						break;
+				}
+			}
+		}
+		if (Mouse.isButtonDown(1) && !rightMouseButtonPressed) {
+			for (float x = 8.0f; x > 1.0; x -= intervalUpdateSize) {
+				int[] blockCoords = getBlockCoords(x);
+				Block blockToAdd = new GrassBlock(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+				if (world.placeBlock(blockToAdd))
+					break;
+			}
+		}
+		updateMouseFlags();
 	}
 
-	public Vector3f getTerrainPoint(float lengthOfRay) {
+	private int[] getBlockCoords(float rayDistance) {
+		Vector3f blockCoords = getTerrainPoint(rayDistance);
+		if (blockCoords != null) {
+			int blockX = Math.round(blockCoords.x);
+			int blockY = Math.round(blockCoords.y);
+			int blockZ = Math.round(blockCoords.z);
+			return new int[] {blockX, blockY, blockZ};
+		}
+		return null;
+	}
+	
+	private void updateMouseFlags() {
+		leftMouseButtonPressed = Mouse.isButtonDown(0);
+		rightMouseButtonPressed = Mouse.isButtonDown(1);
+	}
+	
+	private Vector3f getTerrainPoint(float lengthOfRay) {
 		viewMatrix = MatrixMath.createViewMatrix(camera);
 		currentRay = calculateMouseRay();
 		return getPointOnRay(currentRay, lengthOfRay);
