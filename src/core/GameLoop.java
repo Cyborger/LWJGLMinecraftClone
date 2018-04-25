@@ -1,7 +1,11 @@
 package core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
@@ -9,9 +13,10 @@ import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import entities.blocks.DirtBlock;
-import entities.blocks.LeafBlock;
-import entities.blocks.TreeBlock;
+import guis.GuiRenderer;
+import guis.GuiTexture;
 import loader.Loader;
+import loader.VAOLoader;
 import models.RawModel;
 import models.Texture;
 import models.TexturedModel;
@@ -30,9 +35,11 @@ public class GameLoop {
 	static World world;
 	static Frustum frustum;
 	static MousePicker mousePicker;
+	static GuiRenderer guiRenderer;
 	static boolean leftMousePressed;
 	static boolean rightMousePressed;
 	static Entity deathPig;
+	static List<GuiTexture> guis = new ArrayList<GuiTexture>();
 	public static void main(String[] args) {
 		setup();
 		loop();
@@ -50,6 +57,9 @@ public class GameLoop {
 		Texture pigTexture = new Texture(Loader.loadTexture("tree"));
 		RawModel cubeModel = Loader.loadOBJ("death");
 		deathPig = new Entity(new TexturedModel(cubeModel, pigTexture), new Vector3f(20,16,20), 0, 0, 0, 0.25f);
+		guis.add(new GuiTexture(Loader.loadTexture("health"), new Vector2f(Display.getHeight()/2, Display.getWidth() / 2), new Vector2f(0.5f, 0.5f)));
+		guiRenderer = new GuiRenderer(new VAOLoader());
+		
 	}
 
 	static void loop() {
@@ -62,6 +72,7 @@ public class GameLoop {
 			processBlockEntities();
 			renderer.processEntity(deathPig);
 			renderer.render(light, camera);
+			guiRenderer.render(guis);
 			DisplayManager.UpdateDisplay();
 		}
 	}
@@ -114,6 +125,7 @@ public class GameLoop {
 	
 	static void cleanUp() {
 		renderer.cleanUp();
+		guiRenderer.cleanUp();
 		Loader.cleanUp();
 		DisplayManager.CloseDisplay();
 	}
