@@ -18,14 +18,18 @@ public class World {
 		createChunks(chunks_wide, chunks_high, chunks_deep);
 	}
 
-	public void placeBlock(Block block) {
+	public boolean placeBlock(Block block) {
 		for (Chunk chunk : chunks) {
 			if (chunk.positionWithinChunk(block.getPosition())) {
-				chunk.addBlock(block);
 				int[] localCoords = chunk.getLocalCoordinates(block);
-				updateChunkSide(chunk, localCoords[0], localCoords[1], localCoords[2]);
+				if(chunk.getBlock(localCoords[0], localCoords[1], localCoords[2]) == null) {
+					chunk.addBlock(block);
+					updateChunkSide(chunk, localCoords[0], localCoords[1], localCoords[2]);
+					return true;
+				}
 			}
 		}
+		return false;
 	}
 
 	public boolean removeBlock(int x, int y, int z) {

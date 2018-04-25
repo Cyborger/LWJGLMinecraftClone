@@ -8,6 +8,7 @@ import entities.Block;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import entities.blocks.DirtBlock;
 import entities.blocks.LeafBlock;
 import entities.blocks.TreeBlock;
 import loader.Loader;
@@ -30,6 +31,7 @@ public class GameLoop {
 	static Frustum frustum;
 	static MousePicker mousePicker;
 	static boolean leftMousePressed;
+	static boolean rightMousePressed;
 	static Entity deathPig;
 	public static void main(String[] args) {
 		setup();
@@ -80,7 +82,24 @@ public class GameLoop {
 				}
 			}
 		}
+		if(Mouse.isButtonDown(1) && !rightMousePressed) {
+			for (float x = 8; x > 1; x -= 0.1) {
+				Vector3f blockCoords = mousePicker.getTerrainPoint(x);
+				if (blockCoords != null) {
+					int blockX = Math.round(blockCoords.x);
+					int blockY = Math.round(blockCoords.y);
+					int blockZ = Math.round(blockCoords.z);
+					Block blockToAdd = new DirtBlock(new Vector3f(blockX, blockY, blockZ));
+					if(world.placeBlock(blockToAdd)) {
+						rightMousePressed = Mouse.isButtonDown(1);
+						return;
+					}
+					
+				}
+			}
+		}
 		leftMousePressed = Mouse.isButtonDown(0);
+		rightMousePressed = Mouse.isButtonDown(1);
 	}
 
 	static void processBlockEntities() {
