@@ -6,7 +6,7 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
-import entities.blocks.DirtBlock;
+import entities.blocks.GrassBlock;
 
 public class World {
 	private Chunk[][][] chunkArray;
@@ -68,7 +68,7 @@ public class World {
 			for (int y = 0; y < Chunk.SIZE; ++y) {
 				for (int z = 0; z < Chunk.SIZE; ++z) {
 					Vector3f blockPosition = new Vector3f(x + chunk.x, y + chunk.y, z + chunk.z);
-					placeBlock(new DirtBlock(blockPosition));
+					placeBlock(new GrassBlock(blockPosition));
 				}
 			}
 		}
