@@ -6,14 +6,14 @@ import models.TexturedModel;
 
 public abstract class Block extends Entity {
 
+	protected static int ID;
+	
 	public boolean hasXPNeighbor;
 	public boolean hasXMNeighbor;
 	public boolean hasYPNeighbor;
 	public boolean hasYMNeighbor;
 	public boolean hasZPNeighbor;
 	public boolean hasZMNeighbor;
-
-	private int ID = -1;
 	
 	protected Block(TexturedModel model, Vector3f position) {
 		super(model, position, 0, 0, 0, 1);

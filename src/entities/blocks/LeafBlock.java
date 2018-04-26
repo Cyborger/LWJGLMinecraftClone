@@ -19,10 +19,4 @@ public class LeafBlock extends Block {
 	public LeafBlock(Vector3f position) {
 		super(leafModel, position);
 	}
-	
-	@Override
-	public int GetID() {
-		return ID;
-	}
-
 }
