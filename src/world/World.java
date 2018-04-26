@@ -38,6 +38,7 @@ public class World {
 			if (chunk.positionWithinChunk(new Vector3f(x, y, z))) {
 				boolean blockDestroyed = chunk.removeBlock(x - chunk.x, y - chunk.y, z - chunk.z);
 				updateChunkSide(chunk, x - chunk.x, y - chunk.y, z - chunk.z);
+				System.out.println(BlockHandler.getBlockID(chunk.getBlock(x, y, z)));
 				return blockDestroyed;
 			}
 		}
