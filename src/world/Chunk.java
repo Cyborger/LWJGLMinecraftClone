@@ -44,10 +44,6 @@ public class Chunk {
 		}
 	}
 
-	public Block[][][] getBlocks() {
-		return blockArray;
-	}
-
 	public boolean positionWithinChunk(Vector3f position) {
 		if (position.x >= this.x && position.x < this.x + SIZE && position.y >= this.y && position.y < this.y + SIZE
 				&& position.z >= this.z && position.z < this.z + SIZE) {

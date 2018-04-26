@@ -1,17 +1,13 @@
 package core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
 import entities.Camera;
 import entities.Light;
 import gui.GUIRenderer;
-import gui.GUITexture;
+import gui.HUD;
 import loader.Loader;
 import renderEngine.DisplayManager;
 import renderEngine.MasterRenderer;
@@ -24,13 +20,12 @@ public class GameLoop {
 
 	static MasterRenderer renderer;
 	static GUIRenderer guiRenderer;
+	static HUD hud;
 	static Light light;
 	static Camera camera;
 	static World world;
 	static Frustum frustum;
 	static MousePicker mousePicker;
-
-	static List<GUITexture> guis = new ArrayList<GUITexture>();
 
 	public static void main(String[] args) {
 		setup();
@@ -42,14 +37,12 @@ public class GameLoop {
 		DisplayManager.CreateDisplay();
 		renderer = new MasterRenderer();
 		guiRenderer = new GUIRenderer();
+		hud = new HUD();
 		camera = new Camera(new Vector3f(0, Chunk.SIZE * 5 + 2, 0));
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
 		world = new World(7, 10, 7);
 		frustum = new Frustum();
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
-		
-		guis.add(new GUITexture(Loader.loadTexture("crossHair"), new Vector2f(0, 0), new Vector2f(0.02f, 0.02f)));
-		guiRenderer = new GUIRenderer();
 	}
 
 	static void loop() {
@@ -61,7 +54,7 @@ public class GameLoop {
 			// Render
 			processBlockEntities();
 			renderer.render(light, camera);
-			guiRenderer.render(guis);
+			guiRenderer.render(hud.getElementsToRender());
 			DisplayManager.UpdateDisplay();
 		}
 	}

@@ -2,13 +2,13 @@ package gui;
 
 import org.lwjgl.util.vector.Vector2f;
 
-public class GUITexture {
+public class GUIElement {
 
 	private int texture;
 	private Vector2f position;
 	private Vector2f scale;
 	
-	public GUITexture(int texture, Vector2f position, Vector2f scale) {
+	public GUIElement(int texture, Vector2f position, Vector2f scale) {
 		super();
 		this.texture = texture;
 		this.position = position;
