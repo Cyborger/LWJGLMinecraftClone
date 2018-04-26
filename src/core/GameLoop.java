@@ -48,7 +48,7 @@ public class GameLoop {
 		frustum = new Frustum();
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
 		
-		guis.add(new GUITexture(Loader.loadTexture("health"), new Vector2f(Display.getHeight()/2, Display.getWidth() / 2), new Vector2f(0.5f, 0.5f)));
+		guis.add(new GUITexture(Loader.loadTexture("crossHair"), new Vector2f(0, 0), new Vector2f(0.02f, 0.02f)));
 		guiRenderer = new GUIRenderer();
 		
 	}
