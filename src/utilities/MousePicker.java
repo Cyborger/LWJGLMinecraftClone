@@ -22,7 +22,7 @@ public class MousePicker {
 
 	private boolean leftMouseButtonPressed;
 	private boolean rightMouseButtonPressed;
-	private float intervalUpdateSize = 0.1f;
+	private float intervalUpdateSize = 0.001f;
 
 	public MousePicker(Camera camera, Matrix4f projection) {
 		this.camera = camera;
