@@ -13,13 +13,13 @@ import entities.blocks.GrassBlock;
 import world.World;
 
 public class MousePicker {
-	
+
 	private Vector3f currentRay;
 
 	private Matrix4f projectionMatrix;
 	private Matrix4f viewMatrix;
 	private Camera camera;
-	
+
 	private boolean leftMouseButtonPressed;
 	private boolean rightMouseButtonPressed;
 	private float intervalUpdateSize = 0.1f;
@@ -56,16 +56,16 @@ public class MousePicker {
 			int blockX = Math.round(blockCoords.x);
 			int blockY = Math.round(blockCoords.y);
 			int blockZ = Math.round(blockCoords.z);
-			return new int[] {blockX, blockY, blockZ};
+			return new int[] { blockX, blockY, blockZ };
 		}
 		return null;
 	}
-	
+
 	private void updateMouseFlags() {
 		leftMouseButtonPressed = Mouse.isButtonDown(0);
 		rightMouseButtonPressed = Mouse.isButtonDown(1);
 	}
-	
+
 	private Vector3f getTerrainPoint(float lengthOfRay) {
 		viewMatrix = MatrixMath.createViewMatrix(camera);
 		currentRay = calculateMouseRay();

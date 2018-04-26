@@ -8,7 +8,7 @@ import entities.Camera;
 import renderEngine.MasterRenderer;
 
 public class Frustum {
-	
+
 	public float[][] m_Frustum = new float[6][4];
 
 	private FloatBuffer _proj = BufferUtils.createFloatBuffer(16);
