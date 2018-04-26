@@ -69,7 +69,7 @@ public class GameLoop {
 			}
 		}
 	}
-	
+
 	static void cleanUp() {
 		renderer.cleanUp();
 		guiRenderer.cleanUp();

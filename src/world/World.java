@@ -23,7 +23,7 @@ public class World {
 		for (Chunk chunk : chunks) {
 			if (chunk.positionWithinChunk(block.getPosition())) {
 				int[] localCoords = chunk.getLocalCoordinates(block);
-				if(chunk.getBlock(localCoords[0], localCoords[1], localCoords[2]) == null) {
+				if (chunk.getBlock(localCoords[0], localCoords[1], localCoords[2]) == null) {
 					chunk.addBlock(block);
 					updateChunkSide(chunk, localCoords[0], localCoords[1], localCoords[2]);
 					return true;
@@ -61,7 +61,7 @@ public class World {
 			}
 		}
 	}
-	
+
 	private void fillChunk(Chunk chunk) {
 		for (int x = 0; x < Chunk.SIZE; ++x) {
 			for (int y = 0; y < Chunk.SIZE; ++y) {
@@ -142,7 +142,7 @@ public class World {
 					neighborBlock.hasYMNeighbor = block != null;
 					neighborChunk.determineIfBlockShouldBeRendered(neighborBlock);
 				}
-			} else if(block != null) {
+			} else if (block != null) {
 				if (block.getPosition().y == worldHeight) {
 					block.hasYPNeighbor = true;
 					chunk.determineIfBlockShouldBeRendered(block);
