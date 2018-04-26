@@ -9,7 +9,6 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 
 import loader.Loader;
-import loader.VAOLoader;
 import models.RawModel;
 import utilities.MatrixMath;
 
