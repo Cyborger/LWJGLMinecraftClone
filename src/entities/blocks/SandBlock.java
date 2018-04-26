@@ -18,4 +18,9 @@ public class SandBlock extends Block {
 	public SandBlock(Vector3f position) {
 		super(sandModel, position);
 	}
+	
+	@Override
+	public int GetID() {
+		return ID;
+	}
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
+import entities.BlockHandler;
+import entities.blocks.DirtBlock;
 import entities.blocks.GrassBlock;
 
 public class World {
@@ -36,9 +38,9 @@ public class World {
 	public boolean removeBlock(int x, int y, int z) {
 		for (Chunk chunk : chunks) {
 			if (chunk.positionWithinChunk(new Vector3f(x, y, z))) {
+				
 				boolean blockDestroyed = chunk.removeBlock(x - chunk.x, y - chunk.y, z - chunk.z);
 				updateChunkSide(chunk, x - chunk.x, y - chunk.y, z - chunk.z);
-				System.out.println(BlockHandler.getBlockID(chunk.getBlock(x, y, z)));
 				return blockDestroyed;
 			}
 		}
