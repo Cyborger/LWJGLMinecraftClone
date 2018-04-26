@@ -10,6 +10,7 @@ import models.TexturedModel;
 
 public class GrassBlock extends Block {
 
+	static final int ID = 1;
 	static Texture grassTexture = new Texture(Loader.loadTexture("grass"));
 	static RawModel cubeModel = Loader.loadOBJ("block");
 	static TexturedModel grassModel = new TexturedModel(cubeModel, grassTexture);
@@ -17,5 +18,11 @@ public class GrassBlock extends Block {
 	public GrassBlock(Vector3f position) {
 		super(grassModel, position);
 	}
+	
+	@Override
+	public int GetID() {
+		return ID;
+	}
+
 
 }

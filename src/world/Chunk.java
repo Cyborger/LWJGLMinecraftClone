@@ -30,6 +30,9 @@ public class Chunk {
 
 	public boolean removeBlock(int x, int y, int z) {
 		boolean blockExists = getBlock(x, y, z) != null;
+		if(getBlock(x,y,z) != null) {
+			System.out.println(getBlock(x, y, z).GetID());
+		}
 		blocksToRender.remove(getBlock(x, y, z));
 		blockArray[x][y][z] = null;
 		updateBlockNeighbors(x, y, z);

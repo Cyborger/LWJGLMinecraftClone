@@ -10,6 +10,7 @@ import models.TexturedModel;
 
 public class SandBlock extends Block {
 
+	static final int ID = 3;
 	static Texture sandTexture = new Texture(Loader.loadTexture("sand"));
 	static RawModel cubeModel = Loader.loadOBJ("block");
 	static TexturedModel sandModel = new TexturedModel(cubeModel, sandTexture);
@@ -17,4 +18,10 @@ public class SandBlock extends Block {
 	public SandBlock(Vector3f position) {
 		super(sandModel, position);
 	}
+	
+	@Override
+	public int GetID() {
+		return ID;
+	}
+
 }
