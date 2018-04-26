@@ -29,7 +29,6 @@ public class GameLoop {
 	static World world;
 	static Frustum frustum;
 	static MousePicker mousePicker;
-	
 
 	static List<GUITexture> guis = new ArrayList<GUITexture>();
 
@@ -42,15 +41,20 @@ public class GameLoop {
 	static void setup() {
 		DisplayManager.CreateDisplay();
 		renderer = new MasterRenderer();
+		guiRenderer = new GUIRenderer();
 		camera = new Camera(new Vector3f(0, Chunk.SIZE * 5 + 2, 0));
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
 		world = new World(7, 10, 7);
 		frustum = new Frustum();
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
 		
+<<<<<<< HEAD
 		guis.add(new GUITexture(Loader.loadTexture("crossHair"), new Vector2f(0, 0), new Vector2f(0.02f, 0.02f)));
 		guiRenderer = new GUIRenderer();
 		
+=======
+		guis.add(new GUITexture(Loader.loadTexture("health"), new Vector2f(Display.getHeight()/2, Display.getWidth() / 2), new Vector2f(0.5f, 0.5f)));
+>>>>>>> 368f58477fb46899d151ca467254540f67bfe289
 	}
 
 	static void loop() {
@@ -64,15 +68,13 @@ public class GameLoop {
 			renderer.render(light, camera);
 			guiRenderer.render(guis);
 			DisplayManager.UpdateDisplay();
-			System.out.println(DisplayManager.getDeltaInMilliseconds());
 		}
 	}
 
 	static void processBlockEntities() {
 		frustum.calculate(camera, renderer);
 		for (Chunk chunk : world.getChunks()) {
-			if (frustum.cubeInFrustum(chunk.x, chunk.y, chunk.z, chunk.x + Chunk.SIZE,
-					chunk.y + Chunk.SIZE, chunk.z + Chunk.SIZE)) {
+			if (frustum.cubeInFrustum(chunk.x, chunk.y, chunk.z, Chunk.SIZE)) {
 				for (Block block : chunk.getBlocksToRender()) {
 					renderer.processEntity(block);
 				}
