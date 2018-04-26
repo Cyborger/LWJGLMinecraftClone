@@ -9,15 +9,10 @@ import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
 import entities.Camera;
-import entities.Entity;
 import entities.Light;
-import guis.GuiRenderer;
-import guis.GuiTexture;
+import gui.GUIRenderer;
+import gui.GUITexture;
 import loader.Loader;
-import loader.VAOLoader;
-import models.RawModel;
-import models.Texture;
-import models.TexturedModel;
 import renderEngine.DisplayManager;
 import renderEngine.MasterRenderer;
 import utilities.Frustum;
@@ -28,14 +23,15 @@ import world.World;
 public class GameLoop {
 
 	static MasterRenderer renderer;
+	static GUIRenderer guiRenderer;
 	static Light light;
 	static Camera camera;
 	static World world;
 	static Frustum frustum;
 	static MousePicker mousePicker;
-	static GuiRenderer guiRenderer;
+	
 
-	static List<GuiTexture> guis = new ArrayList<GuiTexture>();
+	static List<GUITexture> guis = new ArrayList<GUITexture>();
 
 	public static void main(String[] args) {
 		setup();
@@ -52,8 +48,8 @@ public class GameLoop {
 		frustum = new Frustum();
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
 		
-		guis.add(new GuiTexture(Loader.loadTexture("health"), new Vector2f(Display.getHeight()/2, Display.getWidth() / 2), new Vector2f(0.5f, 0.5f)));
-		guiRenderer = new GuiRenderer(new VAOLoader());
+		guis.add(new GUITexture(Loader.loadTexture("health"), new Vector2f(Display.getHeight()/2, Display.getWidth() / 2), new Vector2f(0.5f, 0.5f)));
+		guiRenderer = new GUIRenderer();
 		
 	}
 

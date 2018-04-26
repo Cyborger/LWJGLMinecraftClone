@@ -14,6 +14,10 @@ public class Loader {
 		return textureLoader.loadTexture(fileName);
 	}
 
+	public static RawModel loadToVAO(float[] positions) {
+		return vaoLoader.loadToVAO(positions);
+	}
+	
 	public static RawModel loadOBJ(String fileName) {
 		ModelData modelData = objLoader.loadOBJ(fileName);
 		return vaoLoader.loadToVAO(modelData.getVertices(), modelData.getTextureCoords(), modelData.getNormals(),

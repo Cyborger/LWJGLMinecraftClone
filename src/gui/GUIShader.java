@@ -1,17 +1,17 @@
-package guis;
+package gui;
  
 import org.lwjgl.util.vector.Matrix4f;
  
 import shaders.ShaderProgram;
  
-public class GuiShader extends ShaderProgram{
+public class GUIShader extends ShaderProgram{
      
     private static final String VERTEX_FILE = "src/guis/guiVertexShader.txt";
     private static final String FRAGMENT_FILE = "src/guis/guiFragmentShader.txt";
      
     private int location_transformationMatrix;
  
-    public GuiShader() {
+    public GUIShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
     }
      
