@@ -1,5 +1,6 @@
 package core;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -7,6 +8,7 @@ import entities.Block;
 import entities.BlockHandler;
 import entities.Camera;
 import entities.Light;
+import entities.Player;
 import gui.GUIRenderer;
 import gui.HUD;
 import loader.Loader;
@@ -23,10 +25,12 @@ public class GameLoop {
 	static GUIRenderer guiRenderer;
 	static HUD hud;
 	static Light light;
+	static Player player;
 	static Camera camera;
 	static World world;
 	static Frustum frustum;
 	static MousePicker mousePicker;
+	static int blockHeld = 1;
 
 	public static void main(String[] args) {
 		setup();
@@ -39,7 +43,8 @@ public class GameLoop {
 		renderer = new MasterRenderer();
 		guiRenderer = new GUIRenderer();
 		hud = new HUD();
-		camera = new Camera(new Vector3f(0, Chunk.SIZE * 5 + 2, 0));
+		player = new Player(new Vector3f(0, Chunk.SIZE * 5 + 2, 0));
+		camera = new Camera(player);
 		light = new Light(new Vector3f(0, 300, 100), new Vector3f(0.75f, 0.75f, 0.75f));
 		world = new World(7, 10, 7);
 		frustum = new Frustum();
@@ -50,8 +55,13 @@ public class GameLoop {
 	static void loop() {
 		while (!Display.isCloseRequested()) {
 			// Update
-			camera.move();
-			mousePicker.update(world);
+			player.update();
+			camera.update();
+			if (Keyboard.isKeyDown(Keyboard.KEY_1))
+				blockHeld = 1;
+			else if (Keyboard.isKeyDown(Keyboard.KEY_2))
+				blockHeld = 2;
+			mousePicker.update(world, blockHeld);
 
 			// Render
 			processBlockEntities();

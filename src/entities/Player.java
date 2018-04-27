@@ -1,67 +1,76 @@
 package entities;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
-import models.TexturedModel;
-import renderEngine.DisplayManager;
+public class Player {
 
-public class Player extends Entity {
-
-	private static final float RUN_SPEED = 80;
-	private static final float TURN_SPEED = 160;
-	private static final float GRAVITY = -50;
-	private static final float JUMP_POWER = 30;
-
-	private float currentSpeed = 0;
-	private float currentTurnSpeed = 0;
-	private float upwardsSpeed = 0;
-
-	private boolean isInAir = false;
-
-	public Player(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
-		super(model, position, rotX, rotY, rotZ, scale);
+	private Vector3f position;
+	private float viewYaw;
+	private float viewPitch;
+	private float speed = 0.2f;
+	
+	private float moveDX;
+	private float moveDY;
+	private float moveDZ;
+	
+	public Player(Vector3f startPosition) {
+		this.position = startPosition;
 	}
-
-	public void move() {
-		checkInputs();
-		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getDeltaInSeconds(), 0);
-		float distance = currentSpeed * DisplayManager.getDeltaInSeconds();
-		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
-		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
-		super.increasePosition(dx, 0, dz);
-		upwardsSpeed += GRAVITY * DisplayManager.getDeltaInSeconds();
-		super.increasePosition(0, upwardsSpeed * DisplayManager.getDeltaInSeconds(), 0);
-
+	
+	public void update() {
+		updateView();
+		checkForKeyPresses();
+		moveAndCollide();
 	}
-
-	private void jump() {
-		if (!isInAir) {
-			this.upwardsSpeed = JUMP_POWER;
-			isInAir = true;
-		}
+	
+	public float getViewPitch() {
+		return viewPitch;
 	}
-
-	private void checkInputs() {
+	
+	public float getViewYaw() {
+		return viewYaw;
+	}
+	
+	public Vector3f getPosition() {
+		return position;
+	}
+	
+	private void updateView() {
+		viewYaw += Mouse.getDX() / 10.0f;
+		viewPitch -= Mouse.getDY() / 10.0f;
+	}
+	
+	private void checkForKeyPresses() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			this.currentSpeed = RUN_SPEED;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			this.currentSpeed = -RUN_SPEED;
-		} else {
-			this.currentSpeed = 0;
+			moveDX -= (float) Math.cos(Math.toRadians(viewYaw + 90)) * speed;
+			moveDZ -= (float) Math.sin(Math.toRadians(viewYaw + 90)) * speed;
 		}
-
+		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			moveDX += (float) Math.cos(Math.toRadians(viewYaw + 90)) * speed;
+			moveDZ += (float) Math.sin(Math.toRadians(viewYaw + 90)) * speed;
+		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			this.currentTurnSpeed = -TURN_SPEED;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			this.currentTurnSpeed = TURN_SPEED;
-		} else {
-			this.currentTurnSpeed = 0;
+			moveDX += (float) Math.cos(Math.toRadians(viewYaw)) * speed;
+			moveDZ += (float) Math.sin(Math.toRadians(viewYaw)) * speed;
 		}
-
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			jump();
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+			moveDX -= (float) Math.cos(Math.toRadians(viewYaw)) * speed;
+			moveDZ -= (float) Math.sin(Math.toRadians(viewYaw)) * speed;
 		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+			moveDY += speed;
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+			moveDY -= speed;
 	}
-
+	
+	private void moveAndCollide() {
+		position.x += moveDX;
+		position.y += moveDY;
+		position.z += moveDZ;
+		moveDX = 0;
+		moveDY = 0;
+		moveDZ = 0;
+	}
 }

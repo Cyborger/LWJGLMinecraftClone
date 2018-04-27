@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector4f;
 
 import entities.Block;
 import entities.Camera;
+import entities.blocks.CrateBlock;
 import entities.blocks.GrassBlock;
 import world.World;
 
@@ -29,7 +30,7 @@ public class MousePicker {
 		this.projectionMatrix = projection;
 	}
 
-	public void update(World world) {
+	public void update(World world, int heldBlock) {
 		if (Mouse.isButtonDown(0) && !leftMouseButtonPressed) {
 			for (float x = 0; x < 8; x += intervalUpdateSize) {
 				int[] blockCoords = getBlockCoords(x);
@@ -44,7 +45,11 @@ public class MousePicker {
 				int[] blockCoords = getBlockCoords(x);
 				if (world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]) != null) {
 					blockCoords = getBlockCoords(x - intervalUpdateSize);
-					Block blockToAdd = new GrassBlock(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+					Block blockToAdd;
+					if (heldBlock == 1)
+						blockToAdd = new GrassBlock(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+					else
+						blockToAdd = new CrateBlock(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
 					world.placeBlock(blockToAdd);
 					break;
 				}
