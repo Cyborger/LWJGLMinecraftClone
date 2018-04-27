@@ -23,4 +23,5 @@ public class GrassBlock extends Block {
 	public int GetID() {
 		return ID;
 	}
+	
 }

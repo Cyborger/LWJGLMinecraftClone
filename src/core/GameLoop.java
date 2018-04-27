@@ -4,6 +4,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
+import entities.BlockHandler;
 import entities.Camera;
 import entities.Light;
 import gui.GUIRenderer;
@@ -43,6 +44,7 @@ public class GameLoop {
 		world = new World(7, 10, 7);
 		frustum = new Frustum();
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
+		BlockHandler.generateHashMap();
 	}
 
 	static void loop() {
