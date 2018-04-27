@@ -38,7 +38,6 @@ public class World {
 	public boolean removeBlock(int x, int y, int z) {
 		for (Chunk chunk : chunks) {
 			if (chunk.positionWithinChunk(new Vector3f(x, y, z))) {
-				
 				boolean blockDestroyed = chunk.removeBlock(x - chunk.x, y - chunk.y, z - chunk.z);
 				updateChunkSide(chunk, x - chunk.x, y - chunk.y, z - chunk.z);
 				return blockDestroyed;
@@ -47,6 +46,15 @@ public class World {
 		return false;
 	}
 
+	public Block getBlock(int x, int y, int z) {
+		for (Chunk chunk : chunks) {
+			if (chunk.positionWithinChunk(new Vector3f(x, y, z))) {
+				return chunk.getBlock(x - chunk.x, y - chunk.y, z - chunk.z);
+			}
+		}
+		return null;
+	}
+	
 	public List<Chunk> getChunks() {
 		return chunks;
 	}

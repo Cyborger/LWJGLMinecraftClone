@@ -40,11 +40,14 @@ public class MousePicker {
 			}
 		}
 		if (Mouse.isButtonDown(1) && !rightMouseButtonPressed) {
-			for (float x = 8.0f; x > 1.0; x -= intervalUpdateSize) {
+			for (float x = 0; x < 8; x += intervalUpdateSize) {
 				int[] blockCoords = getBlockCoords(x);
-				Block blockToAdd = new GrassBlock(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
-				if (world.placeBlock(blockToAdd))
+				if (world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]) != null) {
+					blockCoords = getBlockCoords(x - intervalUpdateSize);
+					Block blockToAdd = new GrassBlock(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+					world.placeBlock(blockToAdd);
 					break;
+				}
 			}
 		}
 		updateMouseFlags();
