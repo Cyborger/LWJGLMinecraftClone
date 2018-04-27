@@ -9,8 +9,10 @@ import entities.BlockHandler;
 import entities.Camera;
 import entities.Light;
 import entities.Player;
+import entities.blocks.CrateBlock;
 import gui.GUIRenderer;
 import gui.HUD;
+import inventory.InventoryHandler;
 import loader.Loader;
 import renderEngine.DisplayManager;
 import renderEngine.MasterRenderer;
@@ -30,7 +32,8 @@ public class GameLoop {
 	static World world;
 	static Frustum frustum;
 	static MousePicker mousePicker;
-	static int blockHeld = 1;
+	static InventoryHandler inventoryHandler;
+	static int blockHeld;
 
 	public static void main(String[] args) {
 		setup();
@@ -49,7 +52,10 @@ public class GameLoop {
 		world = new World(7, 10, 7);
 		frustum = new Frustum();
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
+		inventoryHandler = new InventoryHandler();
 		BlockHandler.generateHashMap();
+		inventoryHandler.addToInventory(new CrateBlock(null));
+		inventoryHandler.addToInventory(new CrateBlock(null));
 	}
 
 	static void loop() {
@@ -58,9 +64,9 @@ public class GameLoop {
 			player.update();
 			camera.update();
 			if (Keyboard.isKeyDown(Keyboard.KEY_1))
-				blockHeld = 1;
+				blockHeld = 0;
 			else if (Keyboard.isKeyDown(Keyboard.KEY_2))
-				blockHeld = 2;
+				blockHeld = 1;
 			mousePicker.update(world, blockHeld);
 
 			// Render

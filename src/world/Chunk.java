@@ -32,7 +32,7 @@ public class Chunk {
 	public boolean removeBlock(int x, int y, int z) {
 		boolean blockExists = getBlock(x, y, z) != null;
 		if(getBlock(x, y, z) != null) {
-			int id = BlockHandler.getBlockID(getBlock(x, y, z));
+			int id = BlockHandler.getIDFromBlock(getBlock(x, y, z));
 			System.out.println(id);
 		}
 		blocksToRender.remove(getBlock(x, y, z));

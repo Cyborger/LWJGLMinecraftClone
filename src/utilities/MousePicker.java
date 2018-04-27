@@ -1,5 +1,8 @@
 package utilities;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
@@ -8,6 +11,7 @@ import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import entities.Block;
+import entities.BlockHandler;
 import entities.Camera;
 import entities.blocks.CrateBlock;
 import entities.blocks.GrassBlock;
@@ -45,7 +49,33 @@ public class MousePicker {
 				int[] blockCoords = getBlockCoords(x);
 				if (world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]) != null) {
 					blockCoords = getBlockCoords(x - intervalUpdateSize);
-					Block blockToAdd;
+					Block blockToAdd = null;
+					Constructor<Block> constructor;
+					try {
+						constructor = BlockHandler.getBlockFromID(heldBlock).
+						blockToAdd = constructor.newInstance();
+					} catch (NoSuchMethodException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SecurityException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InstantiationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+			        blockToAdd.setPosition(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+
 					if (heldBlock == 1)
 						blockToAdd = new GrassBlock(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
 					else

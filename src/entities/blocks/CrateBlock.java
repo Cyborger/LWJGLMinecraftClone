@@ -19,6 +19,7 @@ public class CrateBlock extends Block {
 		super(crateModel, position);
 	}
 	
+	
 	@Override
 	public int GetID() {
 		return ID;
