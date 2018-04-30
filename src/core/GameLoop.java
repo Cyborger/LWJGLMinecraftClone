@@ -10,6 +10,7 @@ import entities.Camera;
 import entities.Light;
 import entities.Player;
 import entities.blocks.CrateBlock;
+import entities.blocks.GrassBlock;
 import gui.GUIRenderer;
 import gui.HUD;
 import inventory.InventoryHandler;
@@ -53,9 +54,9 @@ public class GameLoop {
 		frustum = new Frustum();
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
 		inventoryHandler = new InventoryHandler();
+		inventoryHandler.addToInventory(new CrateBlock(null));
+		inventoryHandler.addToInventory(new GrassBlock(null));
 		BlockHandler.generateHashMap();
-		inventoryHandler.addToInventory(new CrateBlock(null));
-		inventoryHandler.addToInventory(new CrateBlock(null));
 	}
 
 	static void loop() {
@@ -63,11 +64,8 @@ public class GameLoop {
 			// Update
 			player.update();
 			camera.update();
-			if (Keyboard.isKeyDown(Keyboard.KEY_1))
-				blockHeld = 0;
-			else if (Keyboard.isKeyDown(Keyboard.KEY_2))
-				blockHeld = 1;
-			mousePicker.update(world, blockHeld);
+			checkNumberKeysDown();
+			mousePicker.update(world, inventoryHandler.getInventory().get(blockHeld));
 
 			// Render
 			processBlockEntities();
@@ -86,6 +84,28 @@ public class GameLoop {
 				}
 			}
 		}
+	}
+	
+	static void checkNumberKeysDown() {
+		if (Keyboard.isKeyDown(Keyboard.KEY_1))
+			blockHeld = 0;
+		else if (Keyboard.isKeyDown(Keyboard.KEY_2))
+			blockHeld = 1;
+		else if(Keyboard.isKeyDown(Keyboard.KEY_3))
+			blockHeld = 2;
+		else if(Keyboard.isKeyDown(Keyboard.KEY_4))
+			blockHeld = 3;
+		else if(Keyboard.isKeyDown(Keyboard.KEY_5))
+			blockHeld = 4;
+		else if(Keyboard.isKeyDown(Keyboard.KEY_6))
+			blockHeld = 5;
+		else if(Keyboard.isKeyDown(Keyboard.KEY_7))
+			blockHeld = 6;
+		else if(Keyboard.isKeyDown(Keyboard.KEY_8))
+			blockHeld = 7;
+		else if(Keyboard.isKeyDown(Keyboard.KEY_9))
+			blockHeld = 9;
+		
 	}
 
 	static void cleanUp() {

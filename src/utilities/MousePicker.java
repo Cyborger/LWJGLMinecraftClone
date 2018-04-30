@@ -1,6 +1,5 @@
 package utilities;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import org.lwjgl.input.Mouse;
@@ -11,10 +10,8 @@ import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import entities.Block;
-import entities.BlockHandler;
 import entities.Camera;
-import entities.blocks.CrateBlock;
-import entities.blocks.GrassBlock;
+import inventory.InventoryHandler;
 import world.World;
 
 public class MousePicker {
@@ -28,19 +25,30 @@ public class MousePicker {
 	private boolean leftMouseButtonPressed;
 	private boolean rightMouseButtonPressed;
 	private float intervalUpdateSize = 0.001f;
+	private InventoryHandler inventoryHandler = new InventoryHandler();
 
 	public MousePicker(Camera camera, Matrix4f projection) {
 		this.camera = camera;
 		this.projectionMatrix = projection;
 	}
 
-	public void update(World world, int heldBlock) {
+	public void update(World world, Block block) {
 		if (Mouse.isButtonDown(0) && !leftMouseButtonPressed) {
 			for (float x = 0; x < 8; x += intervalUpdateSize) {
 				int[] blockCoords = getBlockCoords(x);
 				if (blockCoords != null) {
-					if (world.removeBlock(blockCoords[0], blockCoords[1], blockCoords[2]))
+					Block blockToAdd = world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]);
+					Class<? extends Block> constructor;
+					if (world.removeBlock(blockCoords[0], blockCoords[1], blockCoords[2])){
+						try {
+							constructor = blockToAdd.getClass();
+							blockToAdd = constructor.getDeclaredConstructor(Vector3f.class).newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+						} catch (Exception e) {
+							e.printStackTrace();
+						} 
+						inventoryHandler.addToInventory(blockToAdd);
 						break;
+					}
 				}
 			}
 		}
@@ -50,36 +58,13 @@ public class MousePicker {
 				if (world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]) != null) {
 					blockCoords = getBlockCoords(x - intervalUpdateSize);
 					Block blockToAdd = null;
-					Constructor<Block> constructor;
+					Class<? extends Block> constructor;
 					try {
-						constructor = BlockHandler.getBlockFromID(heldBlock).
-						blockToAdd = constructor.newInstance();
-					} catch (NoSuchMethodException e) {
-						// TODO Auto-generated catch block
+						constructor = block.getClass();
+						blockToAdd = constructor.getDeclaredConstructor(Vector3f.class).newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+					} catch (Exception e) {
 						e.printStackTrace();
-					} catch (SecurityException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InstantiationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-			        blockToAdd.setPosition(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
-
-					if (heldBlock == 1)
-						blockToAdd = new GrassBlock(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
-					else
-						blockToAdd = new CrateBlock(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+					} 
 					world.placeBlock(blockToAdd);
 					break;
 				}
