@@ -9,6 +9,8 @@ public class InventoryHandler {
 	
 	private final List<Block> inventory = new ArrayList<Block>();
 	
+	private Block blockToAdd = null;
+	
 	public List<Block> getInventory() {
 		return inventory;
 	}

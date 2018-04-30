@@ -1,7 +1,5 @@
 package utilities;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
@@ -25,14 +23,13 @@ public class MousePicker {
 	private boolean leftMouseButtonPressed;
 	private boolean rightMouseButtonPressed;
 	private float intervalUpdateSize = 0.001f;
-	private InventoryHandler inventoryHandler = new InventoryHandler();
 
 	public MousePicker(Camera camera, Matrix4f projection) {
 		this.camera = camera;
 		this.projectionMatrix = projection;
 	}
 
-	public void update(World world, Block block) {
+	public void update(World world, Block block, InventoryHandler inventoryHandler) {
 		if (Mouse.isButtonDown(0) && !leftMouseButtonPressed) {
 			for (float x = 0; x < 8; x += intervalUpdateSize) {
 				int[] blockCoords = getBlockCoords(x);

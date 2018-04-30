@@ -65,7 +65,7 @@ public class GameLoop {
 			player.update();
 			camera.update();
 			checkNumberKeysDown();
-			mousePicker.update(world, inventoryHandler.getInventory().get(blockHeld));
+			mousePicker.update(world, inventoryHandler.getInventory().get(blockHeld), inventoryHandler);
 
 			// Render
 			processBlockEntities();
