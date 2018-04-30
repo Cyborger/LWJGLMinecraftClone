@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
-import entities.BlockHandler;
 
 public class Chunk {
 
@@ -31,9 +30,6 @@ public class Chunk {
 
 	public boolean removeBlock(int x, int y, int z) {
 		boolean blockExists = getBlock(x, y, z) != null;
-		if(getBlock(x, y, z) != null) {
-			int id = BlockHandler.getIDFromBlock(getBlock(x, y, z));
-		}
 		blocksToRender.remove(getBlock(x, y, z));
 		blockArray[x][y][z] = null;
 		updateBlockNeighbors(x, y, z);

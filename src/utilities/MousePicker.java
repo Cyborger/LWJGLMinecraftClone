@@ -31,38 +31,36 @@ public class MousePicker {
 
 	public void update(World world, Block block, InventoryHandler inventoryHandler) {
 		if (Mouse.isButtonDown(0) && !leftMouseButtonPressed) {
-			for (float x = 0; x < 8; x += intervalUpdateSize) {
-				int[] blockCoords = getBlockCoords(x);
+			for (float i = 0; i < 8; i += intervalUpdateSize) {
+				int[] blockCoords = getBlockCoords(i);
 				if (blockCoords != null) {
-					Block blockToAdd = world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]);
-					Class<? extends Block> constructor;
+					Block blockSelected = world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]);
 					if (world.removeBlock(blockCoords[0], blockCoords[1], blockCoords[2])){
 						try {
-							constructor = blockToAdd.getClass();
-							blockToAdd = constructor.getDeclaredConstructor(Vector3f.class).newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+							Class<? extends Block> constructor = blockSelected.getClass();
+							blockSelected = constructor.getDeclaredConstructor(Vector3f.class).newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
 						} catch (Exception e) {
 							e.printStackTrace();
 						} 
-						inventoryHandler.addToInventory(blockToAdd);
+						inventoryHandler.addToInventory(blockSelected);
 						break;
 					}
 				}
 			}
 		}
 		if (Mouse.isButtonDown(1) && !rightMouseButtonPressed) {
-			for (float x = 0; x < 8; x += intervalUpdateSize) {
-				int[] blockCoords = getBlockCoords(x);
+			for (float i = 0; i < 8; i += intervalUpdateSize) {
+				int[] blockCoords = getBlockCoords(i);
 				if (world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]) != null) {
-					blockCoords = getBlockCoords(x - intervalUpdateSize);
-					Block blockToAdd = null;
-					Class<? extends Block> constructor;
+					blockCoords = getBlockCoords(i - intervalUpdateSize);
 					try {
-						constructor = block.getClass();
-						blockToAdd = constructor.getDeclaredConstructor(Vector3f.class).newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+						Class<? extends Block> constructor = block.getClass();
+						Block blockToPlace = constructor.getDeclaredConstructor(Vector3f.class).
+								newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+						world.placeBlock(blockToPlace);
 					} catch (Exception e) {
 						e.printStackTrace();
 					} 
-					world.placeBlock(blockToAdd);
 					break;
 				}
 			}

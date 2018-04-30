@@ -6,8 +6,6 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
-import entities.BlockHandler;
-import entities.blocks.DirtBlock;
 import entities.blocks.GrassBlock;
 
 public class World {
