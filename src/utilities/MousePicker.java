@@ -38,7 +38,6 @@ public class MousePicker {
 				if (blockCoords != null) {
 					Block blockSelected = world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]);
 					if (world.removeBlock(blockCoords[0], blockCoords[1], blockCoords[2])) {
-						System.out.println(blockSelected.getClass());
 						if(blockLastAdded != null && blockLastAdded == blockSelected.getClass()) {
 							inventoryHandler.addToInventory(blockSelected.getClass(), 1);
 						}
@@ -60,9 +59,8 @@ public class MousePicker {
 				}
 			}
 		}
-		updateMouseFlags();
-	}
-		/*if (Mouse.isButtonDown(1) && !rightMouseButtonPressed) {
+		
+		if (Mouse.isButtonDown(1) && !rightMouseButtonPressed) {
 			for (float i = 0; i < 8; i += intervalUpdateSize) {
 				int[] blockCoords = getBlockCoords(i);
 				if (world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]) != null) {
@@ -78,8 +76,8 @@ public class MousePicker {
 				}
 			}
 		}
-		
-	}*/
+		updateMouseFlags();
+	}
 
 	private int[] getBlockCoords(float rayDistance) {
 		Vector3f blockCoords = getTerrainPoint(rayDistance);

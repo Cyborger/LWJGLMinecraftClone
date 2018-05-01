@@ -1,9 +1,11 @@
 package inventory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.util.vector.Vector3f;
 
 import entities.Block;
 import entities.BlockHandler;
@@ -28,21 +30,32 @@ public class InventoryHandler {
 			inventory.put(currentBlock, 1);
 		}
 		
-		System.out.println(Arrays.asList(inventory));
+		
 	}
 
-	/*public Block getHeldBlock() {
-		Class heldBlock = null;
-		for(Class block : inventory.keySet()) {
-			if(block == BlockHandler.getBlockFromID(currentSelection)) {
-				heldBlock = BlockHandler.getBlockFromID(currentSelection);
-				inventory.remove(heldBlock);
-				
-			}
+	public Block getHeldBlock() {
+		if(inventory.containsKey(BlockHandler.getBlockFromID(currentSelection).getClass())) {
+			Class<? extends Block> constructor = BlockHandler.getBlockFromID(currentSelection).getClass();
+			Block blockSelected;
+			try {
+				blockSelected = constructor.getDeclaredConstructor(Vector3f.class)
+						.newInstance(new Vector3f(0, 0, 0));
+				if(inventory.get(constructor) >= 1 && !inventory.get(constructor).equals(0)) {
+					inventory.put(constructor, inventory.get(constructor) - 1);
+				} else{
+					inventory.remove(constructor);
+				}
+				System.out.println(Arrays.asList(inventory));
+				return blockSelected;
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+			
 		}
-		return heldBlock;
+		return null;
 		
-	}*/
+		
+	}
 	
 	public void update() {
 		for (int i = 0; i < inventoryKeys.length; i++) {
