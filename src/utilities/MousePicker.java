@@ -29,7 +29,7 @@ public class MousePicker {
 		this.projectionMatrix = projection;
 	}
 
-	public void update(World world, Block block, InventoryHandler inventoryHandler) {
+	public void update(World world, InventoryHandler inventoryHandler) {
 		if (Mouse.isButtonDown(0) && !leftMouseButtonPressed) {
 			for (float i = 0; i < 8; i += intervalUpdateSize) {
 				int[] blockCoords = getBlockCoords(i);
@@ -54,12 +54,11 @@ public class MousePicker {
 				if (world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]) != null) {
 					blockCoords = getBlockCoords(i - intervalUpdateSize);
 					try {
-						Class<? extends Block> constructor = block.getClass();
+						Class<? extends Block> constructor = inventoryHandler.getBlockAtIndex().getClass();
 						Block blockToPlace = constructor.getDeclaredConstructor(Vector3f.class).
 								newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
 						world.placeBlock(blockToPlace);
 					} catch (Exception e) {
-						e.printStackTrace();
 					} 
 					break;
 				}

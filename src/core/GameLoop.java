@@ -34,7 +34,6 @@ public class GameLoop {
 	static Frustum frustum;
 	static MousePicker mousePicker;
 	static InventoryHandler inventoryHandler;
-	static int blockHeld;
 
 	public static void main(String[] args) {
 		setup();
@@ -65,7 +64,7 @@ public class GameLoop {
 			player.update();
 			camera.update();
 			checkNumberKeysDown();
-			mousePicker.update(world, inventoryHandler.getInventory().get(blockHeld), inventoryHandler);
+			mousePicker.update(world, inventoryHandler);
 
 			// Render
 			processBlockEntities();
@@ -87,24 +86,14 @@ public class GameLoop {
 	}
 	
 	static void checkNumberKeysDown() {
-		if (Keyboard.isKeyDown(Keyboard.KEY_1))
-			blockHeld = 0;
-		else if (Keyboard.isKeyDown(Keyboard.KEY_2))
-			blockHeld = 1;
-		else if(Keyboard.isKeyDown(Keyboard.KEY_3))
-			blockHeld = 2;
-		else if(Keyboard.isKeyDown(Keyboard.KEY_4))
-			blockHeld = 3;
-		else if(Keyboard.isKeyDown(Keyboard.KEY_5))
-			blockHeld = 4;
-		else if(Keyboard.isKeyDown(Keyboard.KEY_6))
-			blockHeld = 5;
-		else if(Keyboard.isKeyDown(Keyboard.KEY_7))
-			blockHeld = 6;
-		else if(Keyboard.isKeyDown(Keyboard.KEY_8))
-			blockHeld = 7;
-		else if(Keyboard.isKeyDown(Keyboard.KEY_9))
-			blockHeld = 9;
+		int[] keys = {Keyboard.KEY_1, Keyboard.KEY_2, Keyboard.KEY_3, Keyboard.KEY_4,
+				Keyboard.KEY_5, Keyboard.KEY_6, Keyboard.KEY_7, Keyboard.KEY_8, Keyboard.KEY_9};
+
+		for(int i = 0; i < keys.length; i++) {
+			if(Keyboard.isKeyDown(keys[i])) {
+				inventoryHandler.blockHeld = i;
+			}
+		}
 		
 	}
 

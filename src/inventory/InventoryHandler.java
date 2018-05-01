@@ -9,7 +9,7 @@ public class InventoryHandler {
 	
 	private final List<Block> inventory = new ArrayList<Block>();
 	
-	private Block blockToAdd = null;
+	public int blockHeld;
 	
 	public List<Block> getInventory() {
 		return inventory;
@@ -20,7 +20,10 @@ public class InventoryHandler {
 		System.out.println(inventory.toString());
 	}
 
-	public Block getBlockAtIndex(int index) {
-		return inventory.get(index);
+	public Block getBlockAtIndex() {
+		if(inventory.get(blockHeld) != null) {
+			return inventory.get(blockHeld);
+		}
+		return null;
 	}
 }
