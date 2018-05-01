@@ -23,6 +23,8 @@ public class MousePicker {
 	private boolean leftMouseButtonPressed;
 	private boolean rightMouseButtonPressed;
 	private float intervalUpdateSize = 0.001f;
+	
+	private Class blockLastAdded = null;
 
 	public MousePicker(Camera camera, Matrix4f projection) {
 		this.camera = camera;
@@ -36,20 +38,31 @@ public class MousePicker {
 				if (blockCoords != null) {
 					Block blockSelected = world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]);
 					if (world.removeBlock(blockCoords[0], blockCoords[1], blockCoords[2])) {
-						try {
+						System.out.println(blockSelected.getClass());
+						if(blockLastAdded != null && blockLastAdded == blockSelected.getClass()) {
+							inventoryHandler.addToInventory(blockSelected.getClass(), 1);
+						}
+						else {
+							try {
 							Class<? extends Block> constructor = blockSelected.getClass();
 							blockSelected = constructor.getDeclaredConstructor(Vector3f.class)
 									.newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
-						} catch (Exception e) {
-							e.printStackTrace();
+							blockLastAdded = blockSelected.getClass();
+							inventoryHandler.addToInventory(blockSelected.getClass(), 1);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
-						inventoryHandler.addToInventory(blockSelected);
+						
+						
 						break;
 					}
 				}
 			}
 		}
-		if (Mouse.isButtonDown(1) && !rightMouseButtonPressed) {
+		updateMouseFlags();
+	}
+		/*if (Mouse.isButtonDown(1) && !rightMouseButtonPressed) {
 			for (float i = 0; i < 8; i += intervalUpdateSize) {
 				int[] blockCoords = getBlockCoords(i);
 				if (world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]) != null) {
@@ -65,8 +78,8 @@ public class MousePicker {
 				}
 			}
 		}
-		updateMouseFlags();
-	}
+		
+	}*/
 
 	private int[] getBlockCoords(float rayDistance) {
 		Vector3f blockCoords = getTerrainPoint(rayDistance);
