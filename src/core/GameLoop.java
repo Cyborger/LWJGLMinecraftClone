@@ -1,6 +1,5 @@
 package core;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -59,7 +58,7 @@ public class GameLoop {
 			// Update
 			player.update();
 			camera.update();
-			checkNumberKeysDown();
+			inventoryHandler.update();
 			mousePicker.update(world, inventoryHandler);
 
 			// Render
@@ -79,18 +78,6 @@ public class GameLoop {
 				}
 			}
 		}
-	}
-
-	static void checkNumberKeysDown() {
-		int[] keys = { Keyboard.KEY_1, Keyboard.KEY_2, Keyboard.KEY_3, Keyboard.KEY_4, Keyboard.KEY_5, Keyboard.KEY_6,
-				Keyboard.KEY_7, Keyboard.KEY_8, Keyboard.KEY_9 };
-
-		for (int i = 0; i < keys.length; i++) {
-			if (Keyboard.isKeyDown(keys[i])) {
-				inventoryHandler.blockHeld = i;
-			}
-		}
-
 	}
 
 	static void cleanUp() {

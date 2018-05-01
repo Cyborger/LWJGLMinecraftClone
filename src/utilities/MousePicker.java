@@ -55,7 +55,7 @@ public class MousePicker {
 				if (world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]) != null) {
 					blockCoords = getBlockCoords(i - intervalUpdateSize);
 					try {
-						Class<? extends Block> constructor = inventoryHandler.getBlockAtIndex().getClass();
+						Class<? extends Block> constructor = inventoryHandler.getHeldBlock().getClass();
 						Block blockToPlace = constructor.getDeclaredConstructor(Vector3f.class)
 								.newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
 						world.placeBlock(blockToPlace);
