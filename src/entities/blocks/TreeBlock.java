@@ -18,7 +18,7 @@ public class TreeBlock extends Block {
 	public TreeBlock(Vector3f position) {
 		super(treeModel, position);
 	}
-	
+
 	@Override
 	public int GetID() {
 		return ID;

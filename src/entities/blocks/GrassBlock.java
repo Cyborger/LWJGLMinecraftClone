@@ -18,10 +18,10 @@ public class GrassBlock extends Block {
 	public GrassBlock(Vector3f position) {
 		super(grassModel, position);
 	}
-	
+
 	@Override
 	public int GetID() {
 		return ID;
 	}
-	
+
 }

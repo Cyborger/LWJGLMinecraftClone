@@ -35,13 +35,14 @@ public class MousePicker {
 				int[] blockCoords = getBlockCoords(i);
 				if (blockCoords != null) {
 					Block blockSelected = world.getBlock(blockCoords[0], blockCoords[1], blockCoords[2]);
-					if (world.removeBlock(blockCoords[0], blockCoords[1], blockCoords[2])){
+					if (world.removeBlock(blockCoords[0], blockCoords[1], blockCoords[2])) {
 						try {
 							Class<? extends Block> constructor = blockSelected.getClass();
-							blockSelected = constructor.getDeclaredConstructor(Vector3f.class).newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+							blockSelected = constructor.getDeclaredConstructor(Vector3f.class)
+									.newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
 						} catch (Exception e) {
 							e.printStackTrace();
-						} 
+						}
 						inventoryHandler.addToInventory(blockSelected);
 						break;
 					}
@@ -55,11 +56,11 @@ public class MousePicker {
 					blockCoords = getBlockCoords(i - intervalUpdateSize);
 					try {
 						Class<? extends Block> constructor = inventoryHandler.getBlockAtIndex().getClass();
-						Block blockToPlace = constructor.getDeclaredConstructor(Vector3f.class).
-								newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
+						Block blockToPlace = constructor.getDeclaredConstructor(Vector3f.class)
+								.newInstance(new Vector3f(blockCoords[0], blockCoords[1], blockCoords[2]));
 						world.placeBlock(blockToPlace);
 					} catch (Exception e) {
-					} 
+					}
 					break;
 				}
 			}

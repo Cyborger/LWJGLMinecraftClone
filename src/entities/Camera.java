@@ -9,11 +9,11 @@ public class Camera {
 	private float yaw = 145f;
 	private float roll;
 	Player target;
-	
+
 	public Camera(Player target) {
 		this.target = target;
 	}
-	
+
 	public void update() {
 		this.position = this.target.getPosition();
 		this.pitch = this.target.getViewPitch();

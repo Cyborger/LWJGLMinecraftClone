@@ -9,8 +9,6 @@ import entities.BlockHandler;
 import entities.Camera;
 import entities.Light;
 import entities.Player;
-import entities.blocks.CrateBlock;
-import entities.blocks.GrassBlock;
 import gui.GUIRenderer;
 import gui.HUD;
 import inventory.InventoryHandler;
@@ -53,8 +51,6 @@ public class GameLoop {
 		frustum = new Frustum();
 		mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
 		inventoryHandler = new InventoryHandler();
-		inventoryHandler.addToInventory(new CrateBlock(null));
-		inventoryHandler.addToInventory(new GrassBlock(null));
 		BlockHandler.generateHashMap();
 	}
 
@@ -84,17 +80,17 @@ public class GameLoop {
 			}
 		}
 	}
-	
-	static void checkNumberKeysDown() {
-		int[] keys = {Keyboard.KEY_1, Keyboard.KEY_2, Keyboard.KEY_3, Keyboard.KEY_4,
-				Keyboard.KEY_5, Keyboard.KEY_6, Keyboard.KEY_7, Keyboard.KEY_8, Keyboard.KEY_9};
 
-		for(int i = 0; i < keys.length; i++) {
-			if(Keyboard.isKeyDown(keys[i])) {
+	static void checkNumberKeysDown() {
+		int[] keys = { Keyboard.KEY_1, Keyboard.KEY_2, Keyboard.KEY_3, Keyboard.KEY_4, Keyboard.KEY_5, Keyboard.KEY_6,
+				Keyboard.KEY_7, Keyboard.KEY_8, Keyboard.KEY_9 };
+
+		for (int i = 0; i < keys.length; i++) {
+			if (Keyboard.isKeyDown(keys[i])) {
 				inventoryHandler.blockHeld = i;
 			}
 		}
-		
+
 	}
 
 	static void cleanUp() {

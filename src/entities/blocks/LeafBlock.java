@@ -9,7 +9,7 @@ import models.Texture;
 import models.TexturedModel;
 
 public class LeafBlock extends Block {
-	
+
 	static final int ID = 2;
 
 	static Texture leafTexture = new Texture(Loader.loadTexture("leaves"));
@@ -19,7 +19,7 @@ public class LeafBlock extends Block {
 	public LeafBlock(Vector3f position) {
 		super(leafModel, position);
 	}
-	
+
 	@Override
 	public int GetID() {
 		return ID;

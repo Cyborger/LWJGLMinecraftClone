@@ -10,38 +10,38 @@ public class Player {
 	private float viewYaw;
 	private float viewPitch;
 	private float speed = 0.2f;
-	
+
 	private float moveDX;
 	private float moveDY;
 	private float moveDZ;
-	
+
 	public Player(Vector3f startPosition) {
 		this.position = startPosition;
 	}
-	
+
 	public void update() {
 		updateView();
 		checkForKeyPresses();
 		moveAndCollide();
 	}
-	
+
 	public float getViewPitch() {
 		return viewPitch;
 	}
-	
+
 	public float getViewYaw() {
 		return viewYaw;
 	}
-	
+
 	public Vector3f getPosition() {
 		return position;
 	}
-	
+
 	private void updateView() {
 		viewYaw += Mouse.getDX() / 10.0f;
 		viewPitch -= Mouse.getDY() / 10.0f;
 	}
-	
+
 	private void checkForKeyPresses() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			moveDX -= (float) Math.cos(Math.toRadians(viewYaw + 90)) * speed;
@@ -64,7 +64,7 @@ public class Player {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 			moveDY -= speed;
 	}
-	
+
 	private void moveAndCollide() {
 		position.x += moveDX;
 		position.y += moveDY;

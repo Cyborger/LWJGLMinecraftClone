@@ -18,7 +18,7 @@ public class DirtBlock extends Block {
 	public DirtBlock(Vector3f position) {
 		super(dirtModel, position);
 	}
-	
+
 	@Override
 	public int GetID() {
 		return ID;

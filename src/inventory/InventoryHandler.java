@@ -6,11 +6,11 @@ import java.util.List;
 import entities.Block;
 
 public class InventoryHandler {
-	
+
 	private final List<Block> inventory = new ArrayList<Block>();
-	
+
 	public int blockHeld;
-	
+
 	public List<Block> getInventory() {
 		return inventory;
 	}
@@ -21,7 +21,7 @@ public class InventoryHandler {
 	}
 
 	public Block getBlockAtIndex() {
-		if(inventory.get(blockHeld) != null) {
+		if (inventory.get(blockHeld) != null) {
 			return inventory.get(blockHeld);
 		}
 		return null;

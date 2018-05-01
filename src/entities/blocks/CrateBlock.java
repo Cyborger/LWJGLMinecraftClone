@@ -18,11 +18,9 @@ public class CrateBlock extends Block {
 	public CrateBlock(Vector3f position) {
 		super(crateModel, position);
 	}
-	
-	
+
 	@Override
 	public int GetID() {
 		return ID;
 	}
 }
-
